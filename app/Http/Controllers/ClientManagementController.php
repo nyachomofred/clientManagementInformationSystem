@@ -17,9 +17,7 @@ class ClientManagementController extends Controller
     public function add(Request $request){
         $validator=$request->validate([
             'email'=>'nullable|email|unique:clients',
-            'phonenumber'=>'regex:/(07)[0-9]{8}/|string|numeric|digits:10|unique:clients|nullable',
-            
-            
+            'phonenumber'=>'regex:/(07)[0-9]{8}/|string|numeric|digits:10|unique:clients|nullable',  
         ]);
 
             $saveData=DB::table('clients')->insert([
