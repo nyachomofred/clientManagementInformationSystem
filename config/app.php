@@ -169,6 +169,7 @@ return [
          * Package Service Providers...
          */
         Snowfire\Beautymail\BeautymailServiceProvider::class,
+        Propaganistas\LaravelPhone\PhoneServiceProvider::class,
         /*
          * Application Service Providers...
          */

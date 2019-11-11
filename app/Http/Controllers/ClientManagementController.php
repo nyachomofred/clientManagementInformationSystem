@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Propaganistas\LaravelPhone\PhoneNumber;
 use DB;
 class ClientManagementController extends Controller
 {
@@ -16,7 +17,9 @@ class ClientManagementController extends Controller
     public function add(Request $request){
         $validator=$request->validate([
             'email'=>'nullable|email|unique:clients',
-            //'phonenumber'=>'regex:/(+2547)[0-9]{8}/|string|numeric|digits:13|unique:clients|nullable',
+            'phonenumber'=>'regex:/(07)[0-9]{8}/|string|numeric|digits:10|unique:clients|nullable',
+            
+            
         ]);
 
             $saveData=DB::table('clients')->insert([
