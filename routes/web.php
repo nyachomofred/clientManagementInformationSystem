@@ -56,3 +56,19 @@ Route::post('messages/deleteDraftMessage','MessageManagementController@deleteDra
 Route::post('messages/updateDraftMessage','MessageManagementController@updateDraftMessage')->name('messages.updateDraftMessage');
 
 Route::get('/messages/readMessage/{message_id}','MessageManagementController@readMessage')->name('messages.readmessage');
+
+
+
+//compose emails
+Route::get('/mails/composeToAllMember','MailsManagementController@composeToAllMember')->name('mails.composeToAllMember');
+Route::post('/mails/composeToAllMember/create','MailsManagementController@composeToAllMemberCreate')->name('mails.composeToAllMemberCreate');
+
+
+Route::get('/mails/composeToPracticingMember','MailsManagementController@composeToPracticingMember')->name('mails.composeToPracticingMember');
+Route::post('/mails/composeToPracticingMember/create','MailsManagementController@composeToPracticingMemberCreate')->name('mails.composeToPracticingMemberCreate');
+
+Route::get('/mails/composeToAssociateMember','MailsManagementController@composeToAssociateMember')->name('mails.composeToAssociateMember');
+Route::post('/mails/composeToAssociateMember/create','MailsManagementController@composeToAssociateMemberCreate')->name('mails.composeToAssociateMemberCreate');
+
+Route::get('/mails/composeToFullMember','MailsManagementController@composeToFullMember')->name('mails.composeToFullMember');
+Route::post('/mails/composeToFullMember/create','MailsManagementController@composeToFullMemberCreate')->name('mails.composeToFullMemberCreate');

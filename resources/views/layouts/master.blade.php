@@ -174,7 +174,6 @@ $registeredclients=count(DB::table('clients')->get());
           </a>
         </li>
 
-        
 
         <li>
           <a href="{{route('messages.inbox')}}">
@@ -184,7 +183,7 @@ $registeredclients=count(DB::table('clients')->get());
         </li>
         
         <li>
-          <a href="{{route('mails.sent')}}">
+          <a href="{{route('mails.index')}}">
             <i class="fa fa-envelope"></i> <span>Mails</span>
             
           </a>

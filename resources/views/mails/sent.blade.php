@@ -4,7 +4,24 @@
 <section class="content">
       <div class="row">
         <div class="col-md-3">
-          <a href="{{route('mails.compose')}}" class="btn btn-primary btn-block margin-bottom">Compose</a>
+         
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary" style="width:265px;">Compose Message</button>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                
+              <li><a href="{{route('mails.composeToAllMember')}}"><i class="fa fa-file-text-o"></i>Compose email to all members</a></li>
+              <li><a href="{{route('mails.composeToAssociateMember')}}"><i class="fa fa-file-text-o"></i>Compose email to associate members</a></li>
+              <li><a href="{{route('mails.composeToFullMember')}}"><i class="fa fa-file-text-o"></i>Compose email full Members</a></li>
+              <li><a href="{{route('mails.composeToPracticingMember')}}"><i class="fa fa-file-text-o"></i>Compose email to Practicing Members</a></li>
+              <li><a href="{{route('mails.compose')}}"><i class="fa fa-file-text-o"></i> Compos email to specific members</a></li>
+            </ul>
+          </div>
+          <br><br>
+
 
           <div class="box box-solid">
             <div class="box-header with-border">

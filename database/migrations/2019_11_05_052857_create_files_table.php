@@ -15,9 +15,14 @@ class CreateFilesTable extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('email')->default('N/A');
+            $table->string('subject')->default('N/A');
             $table->string('file')->default('N/A');
             $table->string('message_id')->default('N/A');
+            $table->text('message');
+            $table->string('day')->default('N/A');
+            $table->string('month')->default('N/A');
+            $table->string('year')->default('N/A');
+            $table->string('dayTime')->default('N/A');
             $table->timestamps();
         });
     }

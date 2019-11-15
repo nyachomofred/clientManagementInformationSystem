@@ -9,24 +9,7 @@ $clients=DB::table('clients')->get();
  <section class="content">
       <div class="row">
         <div class="col-md-3">
-         
-        <div class="btn-group">
-                  <button type="button" class="btn btn-primary" style="width:265px;">Compose Message </button>
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu">
-                      
-                    <li><a href="{{route('mails.composeToAllMember')}}"><i class="fa fa-file-text-o"></i>Compose email to all members</a></li>
-                    <li><a href="{{route('mails.composeToAssociateMember')}}"><i class="fa fa-file-text-o"></i>Compose email to associate members</a></li>
-                    <li><a href="{{route('mails.composeToFullMember')}}"><i class="fa fa-file-text-o"></i>Compose email full Members</a></li>
-                    <li><a href="{{route('mails.composeToPracticingMember')}}"><i class="fa fa-file-text-o"></i>Compose email to Practicing Members</a></li>
-                    <li><a href="{{route('mails.compose')}}"><i class="fa fa-file-text-o"></i> Compos email to specific members</a></li>
-                  </ul>
-          </div>
-          <br><br>
-
+          <a href="{{route('mails.sent')}}" class="btn btn-primary btn-block margin-bottom">Back to Sent Mails</a>
 
           <div class="box box-solid">
             <div class="box-header with-border">
@@ -52,28 +35,32 @@ $clients=DB::table('clients')->get();
         </div>
         <!-- /.col -->
         <div class="col-md-9">
-
-        @if ($errors->any())
-          <div class="alert alert-danger">
-              <ul>
-                  @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                  @endforeach
-              </ul>
-          </div>
-      @endif
-
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Compose New Message . This message will be received by only selected people</h3>
+              <h3 class="box-title">Compose New Message</h3>
             </div>
                 <form method="POST" action="{{route('mails.insert')}}" enctype="multipart/form-data">
                 @csrf
                     <!-- /.box-header -->
                     <div class="box-body">
+                      <div class="form-group">
+                       
 
-                    <div class="form-group">
-                        <select class="form-control select2" multiple="multiple" data-placeholder="Email" style="width: 100%;" name="email[]"> 
+                        <select class="form-control select2"  data-placeholder="To" style="width: 100%;" name="name" required> 
+                         <option value="">To</option>
+                        @if(!empty($clients))
+                          @foreach($clients as $client)
+                          <option value="{{$client->email}}">{{$client->firstname}} {{$client->lastname}} [{{$client->email}}]->{{$client->member_type}}</option>
+                          @endforeach
+                        @endif
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <input class="form-control" placeholder="Subject:" name="subject">
+                      </div>
+
+                      <div class="form-group">
+                        <select class="form-control select2" multiple="multiple" data-placeholder="Cc" style="width: 100%;" name="MultipleValues[]"> 
                         @if(!empty($clients))
                           @foreach($clients as $client)
                           <option value="{{$client->email}}">{{$client->firstname}} {{$client->lastname}}</option>
@@ -84,35 +71,28 @@ $clients=DB::table('clients')->get();
                       </div>
 
                       <div class="form-group">
-                        <input class="form-control" placeholder="Subject:" name="subject">
-                      </div>
-
-                      
-
-                      <div class="form-group">
                             <textarea id="compose-textarea" class="form-control" style="height: 300px" name="message">
                               
                             </textarea>
                       </div>
                       <div class="form-group">
-                      <div class="input-group control-group increment" >
-                            <input type="file" name="a_file[]" class="form-control" multiple>
+                          <div class="input-group control-group increment" >
+                            <input type="file" name="images[]" class="form-control" multiple>
                             <div class="input-group-btn"> 
                               <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
                             </div>
                           </div>
                           <div class="clone hide">
                             <div class="control-group input-group" style="margin-top:10px">
-                              <input type="file" name="a_file[]" class="form-control" multiple>
+                              <input type="file" name="images[]" class="form-control" multiple>
                               <div class="input-group-btn"> 
                                 <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
                               </div>
                             </div>
                           </div>
-                          
 
 
-                      </div>
+                       </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

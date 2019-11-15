@@ -3,27 +3,28 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <?php
-$clients=DB::table('clients')->get();
+$totalclients=count(DB::table('clients')->where(['member_type'=>'Associate'])->get());
+$clients=DB::table('clients')->where(['member_type'=>'Associate'])->get();
 ?>
  <!-- Main content -->
  <section class="content">
       <div class="row">
         <div class="col-md-3">
-         
+        
         <div class="btn-group">
-                  <button type="button" class="btn btn-primary" style="width:265px;">Compose Message </button>
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu">
-                      
-                    <li><a href="{{route('mails.composeToAllMember')}}"><i class="fa fa-file-text-o"></i>Compose email to all members</a></li>
-                    <li><a href="{{route('mails.composeToAssociateMember')}}"><i class="fa fa-file-text-o"></i>Compose email to associate members</a></li>
-                    <li><a href="{{route('mails.composeToFullMember')}}"><i class="fa fa-file-text-o"></i>Compose email full Members</a></li>
-                    <li><a href="{{route('mails.composeToPracticingMember')}}"><i class="fa fa-file-text-o"></i>Compose email to Practicing Members</a></li>
-                    <li><a href="{{route('mails.compose')}}"><i class="fa fa-file-text-o"></i> Compos email to specific members</a></li>
-                  </ul>
+            <button type="button" class="btn btn-primary" style="width:265px;">Compose Message</button>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                
+            <li><a href="{{route('mails.composeToAllMember')}}"><i class="fa fa-file-text-o"></i>Compose email to all members</a></li>
+            <li><a href="{{route('mails.composeToAssociateMember')}}"><i class="fa fa-file-text-o"></i>Compose email to associate members</a></li>
+            <li><a href="{{route('mails.composeToFullMember')}}"><i class="fa fa-file-text-o"></i>Compose email full Members</a></li>
+            <li><a href="{{route('mails.composeToPracticingMember')}}"><i class="fa fa-file-text-o"></i>Compose email to Practicing Members</a></li>
+            <li><a href="{{route('mails.compose')}}"><i class="fa fa-file-text-o"></i> Compos email to specific members</a></li>
+            </ul>
           </div>
           <br><br>
 
@@ -65,23 +66,12 @@ $clients=DB::table('clients')->get();
 
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Compose New Message . This message will be received by only selected people</h3>
+              <h3 class="box-title">This email shall be received by [{{$totalclients}}] Associate members  <a type="button" class="btn btn-link" data-toggle="modal" data-target=".bd-example-modal-lg">View recipients</a> </h3>
             </div>
-                <form method="POST" action="{{route('mails.insert')}}" enctype="multipart/form-data">
+                <form method="POST" action="{{route('mails.composeToAssociateMemberCreate')}}" enctype="multipart/form-data">
                 @csrf
                     <!-- /.box-header -->
                     <div class="box-body">
-
-                    <div class="form-group">
-                        <select class="form-control select2" multiple="multiple" data-placeholder="Email" style="width: 100%;" name="email[]"> 
-                        @if(!empty($clients))
-                          @foreach($clients as $client)
-                          <option value="{{$client->email}}">{{$client->firstname}} {{$client->lastname}}</option>
-                          @endforeach
-                        @endif
-                        </select>
-
-                      </div>
 
                       <div class="form-group">
                         <input class="form-control" placeholder="Subject:" name="subject">
@@ -109,9 +99,6 @@ $clients=DB::table('clients')->get();
                               </div>
                             </div>
                           </div>
-                          
-
-
                       </div>
                     </div>
                     <!-- /.box-body -->
@@ -123,6 +110,49 @@ $clients=DB::table('clients')->get();
                     </div>
                 </form>
             <!-- /.box-footer -->
+
+
+
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                   
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phonenumber</th>
+                            <th scope="col">Member Type</th>
+                            <th scope="col">City</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @if(!empty($clients))
+                          @foreach($clients as $key=>$record)
+                            <tr>
+                                <th scope="row">{{++$key}}</th>
+                                <td>{{$record->firstname}} {{$record->lastname}}</td>
+                                <td>{{$record->email}}</td>
+                                <td>{{$record->phonenumber}}</td>
+                                <td>{{$record->member_type}}</td>
+                                <td>{{$record->location}}</td>
+                               
+                            </tr>
+                          @endforeach
+                        @endif   
+                        </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
           </div>
           <!-- /. box -->
         </div>
