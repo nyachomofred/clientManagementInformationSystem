@@ -50,7 +50,7 @@
             </form>
         </div>
         <div class="col-md-6 login-right">
-            <a href="#"
+            <a href="{{route('register')}}"
                class="btn bg-olive btn-social btn-block">
                 Register a new account            </a>
             <a href="#"

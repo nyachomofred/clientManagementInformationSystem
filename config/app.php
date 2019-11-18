@@ -170,6 +170,7 @@ return [
          */
         Snowfire\Beautymail\BeautymailServiceProvider::class,
         Propaganistas\LaravelPhone\PhoneServiceProvider::class,
+        ConsoleTVs\Charts\ChartsServiceProvider::class,
         /*
          * Application Service Providers...
          */

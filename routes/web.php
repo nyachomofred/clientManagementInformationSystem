@@ -72,3 +72,12 @@ Route::post('/mails/composeToAssociateMember/create','MailsManagementController@
 
 Route::get('/mails/composeToFullMember','MailsManagementController@composeToFullMember')->name('mails.composeToFullMember');
 Route::post('/mails/composeToFullMember/create','MailsManagementController@composeToFullMemberCreate')->name('mails.composeToFullMemberCreate');
+
+
+
+//PROFILE MANAGEMENT
+Route::get('/profiles','ProfileManagementController@index')->name('profiles.index');
+Route::post('/profiles/update','ProfileManagementController@update')->name('profiles.update');
+
+//CHARTS MANAGEMENT CONTROLLER
+Route::get('/charts','ChartManagementController@index')->name('charts.index');

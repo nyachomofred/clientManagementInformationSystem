@@ -92,7 +92,7 @@ $registeredclients=count(DB::table('clients')->get());
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{route('profiles.index')}}" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                  
@@ -146,7 +146,21 @@ $registeredclients=count(DB::table('clients')->get());
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
+
+        <li>
+          <a href="{{route('home')}}">
+            <i class="fa fa-home"></i> <span>Home</span>
+            
+          </a>
+        </li>
        
+        <li>
+          <a href="{{route('profiles.index')}}">
+            <i class="fa fa-user"></i> <span>Profile</span>
+            
+          </a>
+        </li>
+
         <li>
           <a href="{{route('users.index')}}">
             <i class="fa fa-users"></i> <span>Users</span>
