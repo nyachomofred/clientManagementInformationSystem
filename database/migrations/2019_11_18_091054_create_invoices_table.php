@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClientsTable extends Migration
+class CreateInvoicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,22 @@ class CreateClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('invoice_no')->default('N/A');
             $table->string('client_no')->default('N/A');
             $table->string('member_id')->default('N/A');
             $table->string('firstname')->default('N/A');
             $table->string('lastname')->default('N/A');
-            $table->string('phonenumber')->default('N/A');
             $table->string('email')->default('N/A');
-            $table->string('location')->default('N/A');
-            $table->string('place_of_work')->default('N/A');
-            $table->string('role')->default('N/A');
-            $table->string('member_type')->default('N/A');
+            $table->string('phonenumber')->default('N/A');
+            $table->string('invoice_name')->default('N/A');
+            $table->text('description');
             $table->string('day')->default('N/A');
             $table->string('month')->default('N/A');
             $table->string('year')->default('N/A');
             $table->string('dayTime')->default('N/A');
+            $table->string('dueData')->default('N/A');
             $table->timestamps();
         });
     }
@@ -40,6 +40,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('invoices');
     }
 }

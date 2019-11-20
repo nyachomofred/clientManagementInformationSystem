@@ -81,3 +81,15 @@ Route::post('/profiles/update','ProfileManagementController@update')->name('prof
 
 //CHARTS MANAGEMENT CONTROLLER
 Route::get('/charts','ChartManagementController@index')->name('charts.index');
+
+//INVOICES
+Route::get('/invoices/displayClients','InvoiceManagementController@displayClient')->name('invoices.displayClients');
+Route::get('/invoices/searchClients','InvoiceManagementController@searchClient')->name('invoices.searchClients');
+Route::post('/invoices/insertInvoice','InvoiceManagementController@insertInvoice')->name('invoices.insertInvoice');
+Route::post('/invoices/updateInvoice','InvoiceManagementController@updateInvoice')->name('invoices.updateInvoice');
+Route::post('/invoices/deleteInvoice','InvoiceManagementController@deleteInvoice')->name('invoices.deleteInvoice');
+Route::get('/invoices/addItemInvoicePage/{invoice_no}','InvoiceManagementController@addItemInvoicePage')->name('invoices.addItemInvoicePage');
+Route::post('/invoices/insertInvoiceItem','InvoiceManagementController@insertInvoiceItem')->name('invoices.insertInvoiceItem');
+Route::post('/invoices/updateInvoiceItem','InvoiceManagementController@updateInvoiceItem')->name('invoices.updateInvoiceItem');
+Route::post('/invoices/deleteInvoiceItem','InvoiceManagementController@deleteInvoiceItem')->name('invoices.deleteInvoiceItem');
+Route::get('invoiceview',array('as'=>'invoiceview','uses'=>'InvoiceManagementController@invoiceview'));

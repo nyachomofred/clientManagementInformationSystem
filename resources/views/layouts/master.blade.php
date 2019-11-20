@@ -187,18 +187,33 @@ $registeredclients=count(DB::table('clients')->get());
             </span>
           </a>
         </li>
+        
+        <li>
+          <a href="{{route('mails.index')}}">
+            <i class="fa fa-envelope"></i> <span>Mails</span>
+            
+          </a>
+        </li>
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-book"></i>
+            <span>Invoices</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{route('invoices.displayClients')}}"><i class="fa fa-circle-o"></i> Create New Invoice</a></li>
+            <li><a href="../charts/morris.html"><i class="fa fa-circle-o"></i> View Invoices</a></li>
+          </ul>
+        </li>
+
 
 
         <li>
           <a href="{{route('messages.inbox')}}">
             <i class="fa fa-envelope"></i> <span>Messaging</span>
-            
-          </a>
-        </li>
-        
-        <li>
-          <a href="{{route('mails.index')}}">
-            <i class="fa fa-envelope"></i> <span>Mails</span>
             
           </a>
         </li>

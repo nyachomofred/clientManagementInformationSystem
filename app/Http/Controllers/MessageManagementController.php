@@ -52,9 +52,9 @@ class MessageManagementController extends Controller
           foreach($phonenumbers as $phonenumber){
             $username = 'clientapp'; // use 'sandbox' for development in the test environment
             $apiKey   = '9e27d9238fc430780f66d0e852f9bed4c2f3a6ecb4b2552c95651c8e31b88e32'; // use your sandbox app API key for development in the test environment
-            $AT       = new AfricasTalking($username, $apiKey);
-            $sms      = $AT->sms();
-            $result   = $sms->send([ 'to' =>$phonenumber,'message' =>$message]);
+            $AT       = new AfricasTalking($username, $apiKey); 
+            $sms      = $AT->sms(); //initiate sms
+            $result   = $sms->send([ 'to' =>$phonenumber,'message' =>$message]); //send sms
             $data=DB::table('clients')->where(['phonenumber'=>$phonenumber])->get();
             foreach($data as $client){
                 $firstname=$client->firstname;

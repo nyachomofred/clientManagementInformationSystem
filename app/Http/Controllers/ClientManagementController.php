@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use DB;
+use DateTime;
 class ClientManagementController extends Controller
 {
     //
@@ -19,9 +20,11 @@ class ClientManagementController extends Controller
             'email'=>'nullable|email|unique:clients',
             'phonenumber'=>'regex:/(07)[0-9]{8}/|string|numeric|digits:10|unique:clients|nullable',  
         ]);
-
+            $client_no=rand();
+            $timeset=date_default_timezone_set('Africa/Nairobi');
             $saveData=DB::table('clients')->insert([
                 'member_id'=>ucwords($request->member_id),
+                'client_no'=>$client_no,
                 'firstname'=>ucwords($request->firstname),
                 'lastname'=>ucwords($request->lastname),
                 'phonenumber'=>ucwords($request->phonenumber),
@@ -30,6 +33,10 @@ class ClientManagementController extends Controller
                 'place_of_work'=>ucwords($request->place_of_work),
                 'role'=>ucwords($request->role),
                 'member_type'=>ucwords($request->member_type),
+                'day'=>Date('d'),
+                'month'=>Date('m'),
+                'year'=>Date('Y'),
+                'dayTime'=>Date('h:i"A'),
               ]);
               if($saveData){
                 Alert::success('Success ', 'Data has been saved successfully');
