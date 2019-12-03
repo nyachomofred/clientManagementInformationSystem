@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
+
 use Illuminate\Http\Request;
 use DB;
 class UserManagementController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     public function index(){
         $data=DB::table('users')->get();
@@ -16,19 +22,20 @@ class UserManagementController extends Controller
     public function adduser(Request $request){
         $validateDate=$request->validate([
             'firstname' => ['required', 'string', 'max:255'],
-            'last' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'role' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
         $insertData=DB::table('users')->insert([
-            'firstname'=>$request->lastname,
-            'lastname'=>$request->firstname,
+            'firstname'=>ucwords($request->lastname),
+            'lastname'=>ucwords($request->firstname),
             'email'=>$request->email,
-            'password'=>Has::make($request->password),
+            'password'=>Hash::make($request->password),
             'role'=>$request->role,
             'passwordPlainText'=>$request->password, 
         ]);
+        Alert::success('Success','Data has been saved successfully');
         return redirect()->back();
     }
 
@@ -50,6 +57,7 @@ class UserManagementController extends Controller
     public function deleteuser(Request $request){
         $id=$request->id;
         $insertData=DB::table('users')->where(['id'=>$id])->delete();
+        Alert::warning('Success','Data has been deleted successfully');
         return redirect()->back();
     }
 }

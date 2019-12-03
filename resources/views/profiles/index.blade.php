@@ -4,9 +4,9 @@
  <section class="content">
       <div class="row">
         <!-- right column -->
-        <div class="col-md-6">
+        <div class="col-md-12">
           <!-- Horizontal Form -->
-          <div class="box box-info">
+          <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Profile</h3>
             </div>

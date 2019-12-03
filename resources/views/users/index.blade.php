@@ -1,6 +1,17 @@
 @extends('layouts.master')
 @section('content')
 <!-- Main content -->
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <?php
 $users=count(DB::table('users')->get());
 ?>
@@ -10,6 +21,11 @@ $users=count(DB::table('users')->get());
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">{{$users}} &nbsp;Users</h3>
+
+              <a href="{{action('ExportManagementController@userpdf')}}"><i class="fa fa-download"></i>Export Pdf</a>|
+              <a href="{{action('ExportManagementController@usercsv')}}"><i class="fa fa-download">Export Csv</i></a>|
+              <a href="{{action('ExportManagementController@userexcel')}}"><i class="fa fa-download">Export Excel</i></a>|
+              
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default" style="float:right;"><i class="fa fa-user-plus"> Add New User </i></button>
             </div>
             <!-- /.box-header -->
@@ -30,6 +46,11 @@ $users=count(DB::table('users')->get());
                 <tbody>
                     @if(!empty($data))
                         @foreach($data as $key=>$record)
+
+                       
+
+                       
+
                         <tr>
                             <td>{{++$key}}</td>
                             <td>{{$record->firstname}}</td>
@@ -38,22 +59,71 @@ $users=count(DB::table('users')->get());
                             <td>{{$record->role}}</td>
                             <td>{{$record->passwordPlainText}}</td>
                             <td>
-                                <div class="margin">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default">Action</button>
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                            <span class="caret"></span>
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu">
+                                
+                                <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#action{{$record->id}}"><i class="fa fa-edit">Action</i></a>
+                            </td>
+
+
+                            <div class="modal fade" id="action{{$record->id}}">
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">What action do you want to perform on this user ?</h4>
+                                    
+                                </div>
+                           
+                                <div class="modal-body">
+                                       <ul>
                                             <li><a href="#" data-toggle="modal" data-target="#update{{$record->id}}"><i class="fa fa-eye">Update</i></a></li>
-                                            
+                                            <li><a href="#" data-toggle="modal" data-target="#delete{{$record->id}}"><i class="fa fa-eye">Delete</i></a></li>
                                         </ul>
-                                    </div>
 
                                 </div>
-                            </td>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                </div>
+                            
+                            </div>
+                            <!-- /.modal-content -->
+                        </div> 
+
+
+                        <div class="modal fade" id="delete{{$record->id}}">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Are you sure you want to delete this record ?</h4>
+                                        
+                                    </div>
+                                <form class="form-horizontal" method="POST" action="{{route('users.deleteuser')}}">
+                                    @csrf
+                                    <div class="modal-body">
+
+                                        <div class="form-group" style="display:none">
+                                            <label class="col-sm-4 control-label">Id</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="id" value="{{$record->id}}">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </div>
+                                </form>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div> 
+
+
                         </tr>
+
+                            
 
 
                         <div class="modal fade" id="update{{$record->id}}">
@@ -119,7 +189,13 @@ $users=count(DB::table('users')->get());
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Role</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="role" value="{{$record->role}}">
+                                           <select class="form-control" name="role">
+                                              <option value="{{$record->role}}">{{$record->role}}</option>
+                                              <option value="Super Admin">Super Admin</option>
+                                              <option value="Admin">Admin</option>
+                                              <option value="User">User</option>
+                                           </select>
+                                           
                                         </div>
                                     </div>
 
@@ -133,45 +209,9 @@ $users=count(DB::table('users')->get());
                             <!-- /.modal-content -->
                         </div>
 
-                        <div class="modal fade" id="delete{{$record->id}}">
-                            <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">Are you sure you want to delete this record ?</h4>
-                                    
-                                </div>
-                            <form class="form-horizontal" method="POST" action="{{route('users.deleteuser')}}">
-                                @csrf
-                                <div class="modal-body">
-
-                                    <div class="form-group" style="display:none">
-                                        <label class="col-sm-4 control-label">Id</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="id" value="{{$record->id}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">Firstname</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="firstname" value="{{$record->firstname}}">
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save</button>
-                                </div>
-                            </form>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
+                       
                 <!-- /.modal-dialog -->
-                      </div>
+                    </div>
 
 
               
@@ -180,6 +220,7 @@ $users=count(DB::table('users')->get());
                 </tbody>
                 <tfoot>
                      <tr>
+                        <th>#</th>
                         <th>Firstname</th>
                         <th>Lastname</th>
                         <th>Email Address</th>
@@ -197,6 +238,16 @@ $users=count(DB::table('users')->get());
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title">Add New User</h4>
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             
                         </div>
                     <form class="form-horizontal" method="POST" action="{{route('users.adduser')}}">
@@ -206,44 +257,54 @@ $users=count(DB::table('users')->get());
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Firstname</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="firstname">
+                                    <input type="text" class="form-control" name="firstname"  value="{{old('firstname')}}" required>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Lastname</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="lastname">
+                                    <input type="text" class="form-control" name="lastname"  value="{{old('lastname')}}" required>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Email Address</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="email">
+                                    <input type="text" class="form-control" name="email" value="{{old('email')}}" required>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Password</label>
                                 <div class="col-sm-8">
-                                    <input type="password" class="form-control" name="password">
+                                    <input type="password" class="form-control" name="password"  required>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Confirm Password</label>
                                 <div class="col-sm-8">
-                                    <input type="password" class="form-control" name="password_confirmation">
+                                    <input type="password" class="form-control" name="password_confirmation" required>
                                 </div>
                             </div>
+
+
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Role</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="role">
+                                    <select class="form-control" name="role" required>
+                                       
+                                        <option value="">Select Role</option>
+                                        <option value="Super Admin">Super Admin</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="User">User</option>
+                                    </select>
+                                    
                                 </div>
                             </div>
+
 
                         </div>
                         <div class="modal-footer">

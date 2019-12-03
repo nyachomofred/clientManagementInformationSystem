@@ -10,6 +10,12 @@ use RealRashid\SweetAlert\Facades\Alert;
 class InvoiceManagementController extends Controller
 {
     //
+    
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function displayClient(){
         $invoices=DB::table('invoices')->orderBy('id','DESC')->get();
         return view('invoices.displayClients')->with(['invoices'=>$invoices]);
@@ -42,12 +48,17 @@ class InvoiceManagementController extends Controller
             'email'=>$request->email,
             'phonenumber'=>$request->phonenumber,
             'invoice_name'=>ucfirst($request->invoice_name),
-            'description'=>ucfirst($request->description),
             'day'=>Date('d'),
             'month'=>Date('m'),
             'year'=>Date('Y'),
             'dayTime'=>Date('h:i:A'),
             'dueData'=>$request->dueData,
+
+        ]);
+
+        $invoiceTotal=DB::table('invoicetotals')->insert([
+            'invoice_no'=>$invoice_no,
+            'total'=>0,
 
         ]);
         Alert::success('Success','Data has been saved successfully');
@@ -59,7 +70,7 @@ class InvoiceManagementController extends Controller
         $id=$request->id;
         $updateData=DB::table('invoices')->where(['id'=>$id])->update([
             'invoice_name'=>ucfirst($request->invoice_name),
-            'description'=>ucfirst($request->description),
+            
             'dueData'=>$request->dueData,
 
         ]);
@@ -78,8 +89,9 @@ class InvoiceManagementController extends Controller
  
     public function addItemInvoicePage($invoice_no){
         $data=DB::table('invoices')->where(['invoice_no'=>$invoice_no])->first();
-        $invoiceitems=DB::table('invoiceitems')->get();
-        return view('invoices.additeminvoicepage')->with(['data'=>$data,'invoiceitems'=>$invoiceitems]);
+        $invoiceitems=DB::table('invoiceitems')->where(['invoice_no'=>$invoice_no])->get();
+        $totalitems=count(DB::table('invoiceitems')->where(['invoice_no'=>$invoice_no])->get());
+        return view('invoices.additeminvoicepage')->with(['data'=>$data,'invoiceitems'=>$invoiceitems,'totalitems'=>$totalitems]);
     }
     public function insertInvoiceItem(Request $request){
         $validateData=$request->validate([
@@ -97,6 +109,8 @@ class InvoiceManagementController extends Controller
              'description'=>ucwords($request->description),
              'amount'=>$amount,
          ]);
+         $sumItems=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+         $updateInvoicetotal=DB::table('invoicetotals')->where(['invoice_no'=>$request->invoice_no])->update(['total'=>$sumItems]);
          Alert::success('Success','Data inserted successfully');
         return redirect()->back();
     }
@@ -111,6 +125,8 @@ class InvoiceManagementController extends Controller
              'description'=>ucwords($request->description),
              'amount'=>$amount,
          ]);
+         $sumItems=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+         $updateInvoicetotal=DB::table('invoicetotals')->where(['invoice_no'=>$request->invoice_no])->update(['total'=>$sumItems]);
          Alert::success('Success','Record updated  successfully');
         return redirect()->back();
     }
@@ -118,6 +134,8 @@ class InvoiceManagementController extends Controller
     public function deleteInvoiceItem(Request $request){
          $id=$request->id;
          $insertData=DB::table('invoiceitems')->where(['id'=>$id])->delete();
+         $sumItems=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+         $updateInvoicetotal=DB::table('invoicetotals')->where(['invoice_no'=>$request->invoice_no])->update(['total'=>$sumItems]);
          Alert::success('Success','One record has been delete successfully');
         return redirect()->back();
     }
@@ -126,9 +144,26 @@ class InvoiceManagementController extends Controller
     {
         $invoiceNo=$request->invoice_no;
          $items=DB::table('invoices')->where(['invoice_no'=>$invoiceNo])->first();
-         $invoiceItem=DB::table('invoiceitems')->where(['invoice_no'=>$invoiceNo])->get();
-        view()->share(['items'=>$items,'invoiceItem'=>$invoiceItem]);
-        $pdf = PDF::loadView('invoices.invoiceview');
-        return $pdf->download('invoice.pdf');
+         $invoiceItems=DB::table('invoiceitems')->where(['invoice_no'=>$invoiceNo])->get();
+         $itemcount=count(DB::table('invoiceitems')->where(['invoice_no'=>$invoiceNo])->get());
+         $total=DB::table('invoicetotals')->where(['invoice_no'=>$invoiceNo])->first();
+         if($itemcount > 0){
+             view()->share(['items'=>$items,'invoiceItems'=>$invoiceItems,'total'=>$total]);
+             $pdf = PDF::loadView('invoices.invoiceview');
+             return $pdf->download('invoice.pdf');
+             
+         }else{
+              Alert::warning('Failed','Could not download empty invoice.Please add item to this invoice');
+              return redirect()->back();
+         }
+         
+        
+    }
+
+    public function InvoiceManagement($client_no){
+        $invoices=DB::table('invoices')->where(['client_no'=>$client_no])->get();
+        $client=DB::table('clients')->where(['client_no'=>$client_no])->first();
+        return view('invoices.invoicemanagement')->with(['invoices'=>$invoices,'client'=>$client]);
+
     }
 }

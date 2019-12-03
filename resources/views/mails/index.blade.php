@@ -3,49 +3,16 @@
 <!-- Main content -->
 <section class="content">
       <div class="row">
-        <div class="col-md-3">
-         
-          <div class="btn-group">
-                  <button type="button" class="btn btn-primary" style="width:265px;">Compose Message</button>
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu">
-                      
-                    <li><a href="{{route('mails.composeToAllMember')}}"><i class="fa fa-file-text-o"></i>Compose email to all members</a></li>
-                    <li><a href="{{route('mails.composeToAssociateMember')}}"><i class="fa fa-file-text-o"></i>Compose email to associate members</a></li>
-                    <li><a href="{{route('mails.composeToFullMember')}}"><i class="fa fa-file-text-o"></i>Compose email full Members</a></li>
-                    <li><a href="{{route('mails.composeToPracticingMember')}}"><i class="fa fa-file-text-o"></i>Compose email to Practicing Members</a></li>
-                    <li><a href="{{route('mails.compose')}}"><i class="fa fa-file-text-o"></i> Compos email to specific members</a></li>
-                  </ul>
-          </div>
-          <br><br>
-
-          <div class="box box-solid">
-            <div class="box-header with-border">
-              <h3 class="box-title">Folders</h3>
-
-              <div class="box-tools">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-              </div>
-            </div>
-            <div class="box-body no-padding">
-              <ul class="nav nav-pills nav-stacked">
-                <li><a href="{{route('mails.index')}}"><i class="fa fa-file-text-o"></i> Drafts</a></li>
-                <li><a href="{{route('mails.index')}}"><i class="fa fa-file-text-o"></i> Drafts</a></li>
-              </ul>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /. box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-9">
+       
+        <div class="col-md-12">
           <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Sent Mails</h3>
+
+              <a href="{{action('ExportManagementController@mailpdf')}}"><i class="fa fa-download"></i>Export Pdf</a>|
+              <a href="{{action('ExportManagementController@mailcsv')}}"><i class="fa fa-download">Export Csv</i></a>|
+              <a href="{{action('ExportManagementController@mailexcel')}}"><i class="fa fa-download">Export Excel</i></a>|
+
               <div class="box-tools pull-right">
                 <div class="has-feedback">
                   
@@ -64,7 +31,11 @@
                        <th>Email Id</th>
                        <th>Subject</th>
                        <th>Message</th>
-                       <th>Date</th>
+                       <th>Date Sent</th>
+                       <th>Status</th>
+                       <th>Date Received</th>
+                       <th>Action</th>
+                       <th>Export Recipient</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -74,8 +45,18 @@
                           <td>{{++$key}}</td>
                           <td><a href="{{url('/mails/readSentMails/'.$record->message_id)}}">MSG/{{$record->message_id}}/{{$record->year}}</a></td>
                           <td>{{$record->subject}}</td>
-                          <td>{{$record->message}}</td>
+                          <td><?php echo $record->message?></td>
                           <td>{{$record->day}} {{$record->month}} {{$record->year}}: {{$record->dayTime}}</td>
+                          <td><span class="label label-success">Received</span></td>
+                          <td>{{$record->day}} {{$record->month}} {{$record->year}}: {{$record->dayTime}}</td>
+                          <td><a href="{{url('/mails/readSentMails/'.$record->message_id)}}" class="btn btn-xs btn-primary">More Info</a></td>
+                          <td>
+                               <form  method="POST" action="{{route('exports.ccmailpdf')}}">
+                               @csrf
+                                  <input type="text" name="message_id" value="{{$record->message_id}}" style="display:none;">
+                                  <input type="submit" class="btn btn-xs btn-primary" value="Export Recipient">
+                               </form>
+                          </td>
                         </tr>
                         @endforeach
                     @endif

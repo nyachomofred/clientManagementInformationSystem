@@ -11,9 +11,24 @@ use DateTime;
 class MailsManagementController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index(){
         $data=DB::table('mails')->orderBy('id','DESC')->get();
         return view('mails.index')->with(['data'=>$data]);
+    }
+
+    public function barner(){
+       
+        return view('mails.barner');
+    }
+
+    public function poster(){
+       
+        return view('mails.poster');
     }
 
     public function compose(){
@@ -24,6 +39,22 @@ class MailsManagementController extends Controller
         $sentmails=DB::table('sents')->orderBy('id','DESC')->get();
         return view('mails.sent')->with(['sentmails'=>$sentmails]);
     }
+
+    public function sendOne($client_no){
+        $client=DB::table('clients')->where(['client_no'=>$client_no])->first();
+        $email=$client->email;
+        if($email !==NULL){
+            $mails=DB::table('ccmails')->where(['email'=>$email])->get();
+            return view('mails.sendone')->with(['client'=>$client,'mails'=>$mails]);
+
+        }else{
+            Alert::warning('Faild','This member does not have email Address');
+            return redirect()->back();
+        }
+        
+    }
+
+   
     //read sent mails
     public function readsentmail($message_id){
         $sentmail=DB::table('mails')->where(['message_id'=>$message_id])->first();
@@ -31,14 +62,15 @@ class MailsManagementController extends Controller
         $files=DB::table('files')->where(['message_id'=>$message_id])->get();
         return view('mails.readsentmail')->with(['sentmail'=>$sentmail,'ccmails'=>$ccmails,'files'=>$files]);
     }
-    public function insert(Request $request){
+
+    public function insertone(Request $request){
         $validateDatat=$request->validate(['email'=>'required', 'subject'=>'min:3','message'=>'min:10',]);
         $data=array('email'=>$request->email,'subject'=>$request->subject,  'messagebody'=>$request->message,'a_file'=>$request->a_file,);
           $sendMail= Mail::send('emails.welcome',$data,function($message) use ($data){
                 foreach($data['email'] as $onemail){
                     $message->to($onemail);
                     $message->subject($data['subject']);
-                    $message->from('nyachomofred@gmail.com');
+                    $message->from('globallearningsolutions6@gmail.com','Global Learning Solutions');
                     if(!empty($data['a_file'])){
                     foreach($data['a_file'] as $onefile){
                         $message->attach($onefile->getRealPath(),array(
@@ -91,9 +123,87 @@ class MailsManagementController extends Controller
                                         $file->move('image',$name,'public');
                                         $images[]=$name;
                                         DB::table('files')->insert([
-                                            'firstname' => $firstname,
-                                            'lastname' => $lastname,
-                                            'email'=>$value,
+                                            
+                                            'message_id'=>$message_id,
+                                            'file' => $name,
+                                            'subject'=>$request->subject,
+                                            'message'=>$request->message,
+                                            'day'=>Date('d'),
+                                            'month'=>Date('m'),
+                                            'year'=>Date('y'),
+                                            'dayTime'=>Date('h:i:A'),
+                                            ]); 
+                                        
+                                    }
+                                }
+                        }
+                       
+                }
+                Alert::success('Success','message has been sent successfully');
+                return redirect()->back();
+            }   
+    }
+    public function insert(Request $request){
+        $validateDatat=$request->validate(['email'=>'required', 'subject'=>'min:3','message'=>'min:10',]);
+        $data=array('email'=>$request->email,'subject'=>$request->subject,  'messagebody'=>$request->message,'a_file'=>$request->a_file,);
+          $sendMail= Mail::send('emails.welcome',$data,function($message) use ($data){
+                foreach($data['email'] as $onemail){
+                    $message->to($onemail);
+                    $message->subject($data['subject']);
+                    $message->from('globallearningsolutions6@gmail.com','Global Learning Solutions');
+                    if(!empty($data['a_file'])){
+                    foreach($data['a_file'] as $onefile){
+                        $message->attach($onefile->getRealPath(),array(
+                            'as'=>$onefile->getClientOriginalName(),
+                            'mime'=>$onefile->getMimeType()
+                    
+                        ));
+                    }
+                  }
+                }
+            });
+        
+            $multipleValues = input::get('email');//getting values of cc mails
+            $files=input::file('a_file');//getting values of clicked files.
+            $message=input::get('message');
+            $message_id=rand();
+
+                if(!empty($multipleValues)){
+                    $inserdata=DB::table('mails')->insert([
+                        'message_id'=>$message_id,
+                        'subject'=>$request->subject,
+                        'message'=>$request->message,
+                        'day'=>Date('d'),
+                        'month'=>Date('m'),
+                        'year'=>Date('y'),
+                        'dayTime'=>Date('h:i:A'),
+
+                    ]);
+                    foreach($multipleValues as $value){
+                        $insertData[]=$value;
+                        $persons=DB::table('clients')->where(['email'=>$value])->get();
+                        foreach($persons as $person){
+                            $firstname=$person->firstname;
+                            $lastname=$person->lastname;
+                            DB::table('ccmails')->insert([
+                                'firstname' => $firstname,
+                                'lastname' => $lastname,
+                                'email' => $value,
+                                'message_id'=>$message_id,
+                                'subject'=>$request->subject,
+                                'message'=>$request->message,
+                                'day'=>Date('d'),
+                                'month'=>Date('m'),
+                                'year'=>Date('y'),
+                                'dayTime'=>Date('h:i:A'),
+                                ]);
+                                if(!empty($files)){
+                                    foreach($files as $file){
+                                        $name=$file->getClientOriginalName();
+                                        $file->move('image',$name,'public');
+                                        $images[]=$name;
+                                        DB::table('files')->insert([
+                                            
                                             'message_id'=>$message_id,
                                             'file' => $name,
                                             'subject'=>$request->subject,
@@ -132,7 +242,7 @@ class MailsManagementController extends Controller
                       $onemail=$recipient->email;
                       $message->to($onemail);
                       $message->subject($data['subject']);
-                      $message->from('nyachomofred@gmail.com');
+                      $message->from('globallearningsolutions6@gmail.com','Global Learning Solutions');
                       if(!empty($data['a_file'])){
                       foreach($data['a_file'] as $onefile){
                           $message->attach($onefile->getRealPath(),array(
@@ -229,7 +339,7 @@ class MailsManagementController extends Controller
                       $onemail=$recipient->email;
                       $message->to($onemail);
                       $message->subject($data['subject']);
-                      $message->from('nyachomofred@gmail.com');
+                      $message->from('globallearningsolutions6@gmail.com','Global Learning Solutions');
                       if(!empty($data['a_file'])){
                       foreach($data['a_file'] as $onefile){
                           $message->attach($onefile->getRealPath(),array(
@@ -327,7 +437,7 @@ class MailsManagementController extends Controller
                       $onemail=$recipient->email;
                       $message->to($onemail);
                       $message->subject($data['subject']);
-                      $message->from('nyachomofred@gmail.com');
+                      $message->from('globallearningsolutions6@gmail.com','Global Learning Solutions');
                       if(!empty($data['a_file'])){
                       foreach($data['a_file'] as $onefile){
                           $message->attach($onefile->getRealPath(),array(
@@ -422,7 +532,7 @@ class MailsManagementController extends Controller
                       $onemail=$recipient->email;
                       $message->to($onemail);
                       $message->subject($data['subject']);
-                      $message->from('nyachomofred@gmail.com');
+                      $message->from('globallearningsolutions6@gmail.com','Global Learning Solutions');
                       if(!empty($data['a_file'])){
                       foreach($data['a_file'] as $onefile){
                           $message->attach($onefile->getRealPath(),array(
@@ -501,5 +611,148 @@ class MailsManagementController extends Controller
         }
     }
 
+
+
+    public function createbarner(Request $request){
+        $validateDatat=$request->validate(['email'=>'required', 'subject'=>'min:3']);
+            $multipleValues = input::get('email');//getting values of cc mails
+            $files=input::file('a_file');//getting values of clicked files.
+            $message_id=rand();
+
+                if(!empty($multipleValues)){
+                    $inserdata=DB::table('mails')->insert([
+                        'message_id'=>$message_id,
+                        'subject'=>$request->subject,
+                        'message'=>'N/A',
+                        'day'=>Date('d'),
+                        'month'=>Date('m'),
+                        'year'=>Date('y'),
+                        'dayTime'=>Date('h:i:A'),
+
+                    ]);
+                    foreach($multipleValues as $value){
+                        $insertData[]=$value;
+                        $persons=DB::table('clients')->where(['email'=>$value])->get();
+                        foreach($persons as $person){
+                            $firstname=$person->firstname;
+                            $lastname=$person->lastname;
+                            DB::table('ccmails')->insert([
+                                'firstname' => $firstname,
+                                'lastname' => $lastname,
+                                'email' => $value,
+                                'message_id'=>$message_id,
+                                'subject'=>$request->subject,
+                                'message'=>'N/A',
+                                'day'=>Date('d'),
+                                'month'=>Date('m'),
+                                'year'=>Date('y'),
+                                'dayTime'=>Date('h:i:A'),
+                                ]);
+                                if(!empty($files)){
+                                    foreach($files as $file){
+                                        $name=$file->getClientOriginalName();
+                                        $file->move('image',$name,'public');
+                                        $images[]=$name;
+                                        DB::table('files')->insert([
+                                            
+                                            'message_id'=>$message_id,
+                                            'file' => $name,
+                                            'subject'=>$request->subject,
+                                            'message'=>'N/A',
+                                            'day'=>Date('d'),
+                                            'month'=>Date('m'),
+                                            'year'=>Date('y'),
+                                            'dayTime'=>Date('h:i:A'),
+                                            ]); 
+                                        
+                                    }
+                                }
+                        }
+                       
+                        $data=array('email'=>$request->email,'subject'=>$request->subject, 'a_file'=>$request->a_file,);
+                        $sendMail= Mail::send('emails.barner',$data,function($message) use ($data){
+                                foreach($data['email'] as $onemail){
+                                    $message->to($onemail);
+                                    $message->subject($data['subject']);
+                                    $message->from('globallearningsolutions6@gmail.com','Global Learning Solutions');
+                                }
+                            });
+                
+                    }
+                Alert::success('Success','message has been sent successfully');
+                return redirect()->route('mails.index');
+            }   
+    }
+
+    public function createposter(Request $request){
+            $validateDatat=$request->validate(['email'=>'required', 'subject'=>'min:3']);
+            $multipleValues = input::get('email');//getting values of cc mails
+            $files=input::file('a_file');//getting values of clicked files.
+            $message_id=rand();
+
+                if(!empty($multipleValues)){
+                    $inserdata=DB::table('mails')->insert([
+                        'message_id'=>$message_id,
+                        'subject'=>$request->subject,
+                        'message'=>'N/A',
+                        'day'=>Date('d'),
+                        'month'=>Date('m'),
+                        'year'=>Date('y'),
+                        'dayTime'=>Date('h:i:A'),
+
+                    ]);
+                    foreach($multipleValues as $value){
+                        $insertData[]=$value;
+                        $persons=DB::table('clients')->where(['email'=>$value])->get();
+                        foreach($persons as $person){
+                            $firstname=$person->firstname;
+                            $lastname=$person->lastname;
+                            DB::table('ccmails')->insert([
+                                'firstname' => $firstname,
+                                'lastname' => $lastname,
+                                'email' => $value,
+                                'message_id'=>$message_id,
+                                'subject'=>$request->subject,
+                                'message'=>'N/A',
+                                'day'=>Date('d'),
+                                'month'=>Date('m'),
+                                'year'=>Date('y'),
+                                'dayTime'=>Date('h:i:A'),
+                                ]);
+                                if(!empty($files)){
+                                    foreach($files as $file){
+                                        $name=$file->getClientOriginalName();
+                                        $file->move('image',$name,'public');
+                                        $images[]=$name;
+                                        DB::table('files')->insert([
+                                            
+                                            'message_id'=>$message_id,
+                                            'file' => $name,
+                                            'subject'=>$request->subject,
+                                            'message'=>'N/A',
+                                            'day'=>Date('d'),
+                                            'month'=>Date('m'),
+                                            'year'=>Date('y'),
+                                            'dayTime'=>Date('h:i:A'),
+                                            ]); 
+                                        
+                                    }
+                                }
+                        }
+                       
+                        $data=array('email'=>$request->email,'subject'=>$request->subject, 'a_file'=>$request->a_file,);
+                        $sendMail= Mail::send('emails.poster',$data,function($message) use ($data){
+                                foreach($data['email'] as $onemail){
+                                    $message->to($onemail);
+                                    $message->subject($data['subject']);
+                                    $message->from('globallearningsolutions6@gmail.com','Global Learning Solutions');
+                                }
+                            });
+                
+                    }
+                Alert::success('Success','message has been sent successfully');
+                return redirect()->route('mails.index');
+            }   
+    }
 
 }

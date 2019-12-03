@@ -18,6 +18,7 @@ class CreateClientsTable extends Migration
             $table->string('client_no')->default('N/A');
             $table->string('member_id')->default('N/A');
             $table->string('firstname')->default('N/A');
+            $table->string('middlename')->default('N/A');
             $table->string('lastname')->default('N/A');
             $table->string('phonenumber')->default('N/A');
             $table->string('email')->default('N/A');

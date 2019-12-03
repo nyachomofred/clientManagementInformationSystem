@@ -23,7 +23,7 @@ class CreateInvoicesTable extends Migration
             $table->string('email')->default('N/A');
             $table->string('phonenumber')->default('N/A');
             $table->string('invoice_name')->default('N/A');
-            $table->text('description');
+           
             $table->string('day')->default('N/A');
             $table->string('month')->default('N/A');
             $table->string('year')->default('N/A');

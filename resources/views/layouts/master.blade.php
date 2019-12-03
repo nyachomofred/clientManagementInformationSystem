@@ -97,13 +97,14 @@ $registeredclients=count(DB::table('clients')->get());
                 <div class="pull-right">
                  
                   <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Sign Out') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
+                          onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                          {{ __('Sign Out') }}
+                      </a>
+
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                          @csrf
+                      </form>
 
                 </div>
               </li>
@@ -176,7 +177,7 @@ $registeredclients=count(DB::table('clients')->get());
 
         <li>
           <a href="{{route('clients.index')}}">
-            <i class="fa fa-envelope"></i> <span>Clients Management</span>
+            <i class="fa fa-users"></i> <span>Clients Management</span>
             <span class="pull-right-container">
             @if(!empty($registeredclients))
             <small class="label pull-right bg-green">{{$registeredclients}}</small>
@@ -188,38 +189,94 @@ $registeredclients=count(DB::table('clients')->get());
           </a>
         </li>
         
-        <li>
-          <a href="{{route('mails.index')}}">
-            <i class="fa fa-envelope"></i> <span>Mails</span>
-            
+        
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-envelope"></i>
+            <span>Group Mails</span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right"></span>
+            </span>
           </a>
+          <ul class="treeview-menu">
+            <li><a href="{{route('mails.index')}}"><i class="fa fa-file-text-o"></i>View Sent Mails</a></li>
+            <li><a href="{{route('mails.composeToAllMember')}}"><i class="fa fa-file-text-o"></i>Mail   all Members</a></li>
+            <li><a href="{{route('mails.composeToAssociateMember')}}"><i class="fa fa-file-text-o"></i>Mail associate members only</a></li>
+            <li><a href="{{route('mails.composeToFullMember')}}"><i class="fa fa-file-text-o"></i>Mail full Members Only</a></li>
+            <li><a href="{{route('mails.composeToPracticingMember')}}"><i class="fa fa-file-text-o"></i>Mail Practicing Members Only</a></li>
+            <li><a href="{{route('mails.compose')}}"><i class="fa fa-file-text-o"></i>Mail specific members</a></li>
+           
+          </ul>
         </li>
 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-book"></i>
-            <span>Invoices</span>
+            <i class="fa fa-envelope"></i>
+            <span>Mails Campaign</span>
             <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
+              <span class="label label-primary pull-right"></span>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{route('invoices.displayClients')}}"><i class="fa fa-circle-o"></i> Create New Invoice</a></li>
-            <li><a href="../charts/morris.html"><i class="fa fa-circle-o"></i> View Invoices</a></li>
+           
+            <li><a href="{{route('mails.barner')}}"><i class="fa fa-file-text-o"></i>Activation Mail</a></li>
+            <li><a href="{{route('mails.poster')}}"><i class="fa fa-file-text-o"></i>Advertisement</a></li>
+            
+          </ul>
+        </li>
+
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-envelope"></i>
+            <span>Group Messages</span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right"></span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+           <li><a href="{{route('messages.inbox')}}"><i class="fa fa-file-text-o"></i>View Sent Mails</a></li>
+           
+            <li><a href="{{route('messages.composespecificgroup')}}"><i class="fa fa-file-text-o"></i>Message specific people</a></li>
+            <li><a href="{{route('messages.composepracticingmember')}}"><i class="fa fa-file-text-o"></i>  Message  Practicing Members</a></li>
+            <li><a href="{{route('messages.composefullmember')}}"><i class="fa fa-file-text-o"></i>Message  Fullmembers</a></li>
+            <li><a href="{{route('messages.composeassociatemember')}}"><i class="fa fa-file-text-o"></i>Message Associate Members</a></li>
+            <li><a href="{{route('messages.composeToAll')}}"><i class="fa fa-file-text-o"></i> Message  all Members</a></li>
+            <li><a href="{{route('messages.draftmessage')}}"><i class="fa fa-file-text-o"></i>Draft Message</a></li>
           </ul>
         </li>
 
 
 
-        <li>
-          <a href="{{route('messages.inbox')}}">
-            <i class="fa fa-envelope"></i> <span>Messaging</span>
-            
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-envelope"></i>
+            <span>Reports</span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right">5</span>
+            </span>
           </a>
+          <ul class="treeview-menu">
+            <li><a href="{{route('reports.client')}}"><i class="fa fa-file-text-o"></i> Members and their memberships</a></li>
+            <li><a href="#"><i class="fa fa-file-text-o"></i>Send and failed mails</a></li>
+            <li><a href="#"><i class="fa fa-file-text-o"></i> Send and Failed messages</a></li>
+            <li><a href="#"><i class="fa fa-file-text-o"></i>Send and processed invoices</a></li>
+          </ul>
         </li>
 
-       
-        
+        <li>
+        <a  href="{{ route('logout') }}"
+                          onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                          <i class="fa fa-share"></i> <span>Log Out</span>
+
+                      </a>
+
+           <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">  @csrf</form>
+        </li>
+
+
 
       </ul>
     </section>
@@ -288,6 +345,10 @@ $registeredclients=count(DB::table('clients')->get());
 <!-- DataTables -->
 <script src="{{asset('master/plugins/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('master/plugins/datatables/dataTables.bootstrap4.js')}}"></script>
+<script src="{{asset('master/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
+
+<script src="{{asset('master/bower_components/ckeditor/ckeditor.js')}}"></script>
+<!-- Bootstrap WYSIHTML5 -->
 <script src="{{asset('master/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
 <!-- Page Script -->
 <!-- Page script -->
@@ -371,6 +432,17 @@ $registeredclients=count(DB::table('clients')->get());
     });
   });
 </script>
+
+<script>
+  $(function () {
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace('editor1')
+    //bootstrap WYSIHTML5 - text editor
+    $('.textarea').wysihtml5()
+  })
+</script>
+
 
 
 

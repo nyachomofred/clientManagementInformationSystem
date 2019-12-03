@@ -9,49 +9,8 @@ $clients=DB::table('clients')->where(['member_type'=>'Fullmember'])->get();
  <!-- Main content -->
  <section class="content">
       <div class="row">
-        <div class="col-md-3">
-         
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary" style="width:265px;">Compose Message</button>
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-            <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                
-            <li><a href="{{route('mails.composeToAllMember')}}"><i class="fa fa-file-text-o"></i>Compose email to all members</a></li>
-            <li><a href="{{route('mails.composeToAssociateMember')}}"><i class="fa fa-file-text-o"></i>Compose email to associate members</a></li>
-            <li><a href="{{route('mails.composeToFullMember')}}"><i class="fa fa-file-text-o"></i>Compose email full Members</a></li>
-            <li><a href="{{route('mails.composeToPracticingMember')}}"><i class="fa fa-file-text-o"></i>Compose email to Practicing Members</a></li>
-            <li><a href="{{route('mails.compose')}}"><i class="fa fa-file-text-o"></i> Compos email to specific members</a></li>
-            </ul>
-          </div>
-          <br><br>
-
-          <div class="box box-solid">
-            <div class="box-header with-border">
-              <h3 class="box-title">Folders</h3>
-
-              <div class="box-tools">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-              </div>
-            </div>
-            <div class="box-body no-padding">
-              <ul class="nav nav-pills nav-stacked">
-                
-                  <li><a href="{{route('mails.sent')}}"><i class="fa fa-envelope-o"></i> Sent</a></li>
-                <li><a href="{{route('mails.index')}}"><i class="fa fa-file-text-o"></i> Drafts</a></li>
-              </ul>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /. box -->
-          
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-9">
+       
+        <div class="col-md-12">
 
         @if ($errors->any())
           <div class="alert alert-danger">
@@ -65,40 +24,50 @@ $clients=DB::table('clients')->where(['member_type'=>'Fullmember'])->get();
 
           <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">This email shall be received by [{{$totalclients}}] Full members  <a type="button" class="btn btn-link" data-toggle="modal" data-target=".bd-example-modal-lg">View recipients</a> </h3>
+              <h3 class="box-title"> <a href="{{route('mails.index')}}"> <i class="fa fa-backward"></i>Go Back</a> &nbsp; &nbsp; This email shall be received by [{{$totalclients}}] Full members  <a type="button" class="btn btn-link" data-toggle="modal" data-target=".bd-example-modal-lg">View recipients</a> </h3>
             </div>
-                <form method="POST" action="{{route('mails.composeToFullMemberCreate')}}" enctype="multipart/form-data">
+                <form method="POST" action="{{route('mails.composeToFullMemberCreate')}}" enctype="multipart/form-data" class="form-horizontal">
                 @csrf
                     <!-- /.box-header -->
                     <div class="box-body">
-
-                      <div class="form-group">
-                        <input class="form-control" placeholder="Subject:" name="subject">
-                      </div>
-
-                      
-
-                      <div class="form-group">
-                            <textarea id="compose-textarea" class="form-control" style="height: 300px" name="message">
-                              
-                            </textarea>
-                      </div>
-                      <div class="form-group">
-                      <div class="input-group control-group increment" >
-                            <input type="file" name="a_file[]" class="form-control" multiple>
-                            <div class="input-group-btn"> 
-                              <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
-                            </div>
+                    <div class="form-group">
+                          <label class="col-sm-2 control-label">Subject</label>
+                          <div class="col-sm-10">
+                            <input class="form-control" placeholder="Subject:" name="subject">
                           </div>
-                          <div class="clone hide">
-                            <div class="control-group input-group" style="margin-top:10px">
-                              <input type="file" name="a_file[]" class="form-control" multiple>
-                              <div class="input-group-btn"> 
-                                <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
+                      </div>
+
+                     <br>
+
+                      <div class="form-group">
+                              <label class="col-sm-2 control-label">Message</label>
+                              <div class="col-sm-10">
+                                  <textarea id="editor1" class="form-control"  name="message"> </textarea>
                               </div>
-                            </div>
-                          </div>
                       </div>
+                      <br>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Attachment</label>
+                         <div class="col-sm-10">
+                            <div class="input-group control-group increment" >
+                                <input type="file" name="a_file[]" class="form-control" multiple>
+                                <div class="input-group-btn"> 
+                                  <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
+                                </div>
+                              </div>
+                              <div class="clone hide">
+                                <div class="control-group input-group" style="margin-top:10px">
+                                  <input type="file" name="a_file[]" class="form-control" multiple>
+                                  <div class="input-group-btn"> 
+                                    <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
+                                  </div>
+                                </div>
+                              </div>
+                      </div>
+                      </div>
+
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
