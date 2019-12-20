@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/laravel_google_chart','LaravelGoogleGraphController@index');
+Route::get('/computational','LaravelGoogleGraphController@computational');
+Route::get('/comunicationReport','LaravelGoogleGraphController@comunicationReport');
+Route::get('/MailComunicationReport','LaravelGoogleGraphController@MailComunicationReport');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -148,6 +153,7 @@ Route::get('message/export/excel', 'ExportManagementController@messageexcel');
 //REPORTS MANAGEMENT CONTROLLER
 Route::get('report/client','ReportManagementController@client')->name('reports.client');
 Route::post('report/client/report','ReportManagementController@clientreport')->name('reports.clientreport');
+Route::get('report','ReportManagementController@index')->name('reports.index');
 
 
 
@@ -155,3 +161,21 @@ Route::post('report/client/report','ReportManagementController@clientreport')->n
 Route::get('/inforbips/send','InfobipManagementController@send')->name('infobips.send');
 Route::get('/inforbips/composetospecificgroup','InfobipManagementController@composeToSpecificGroup')->name('infobips.composetospecificgroup');
 Route::post('/inforbips/composetospecificgroup/send','InfobipManagementController@sendToSpecific')->name('infobips.sendToSpecific');
+
+
+
+
+//COMPANY PROFILE AND SIGNATURE MANAGEMENT CONTROLLER
+Route::get('signatures','SignatureManagementController@index')->name('signatures.index');
+Route::post('signatures/insert','SignatureManagementController@insert')->name('signatures.insert');
+Route::post('signatures/update','SignatureManagementController@update')->name('signatures.update');
+Route::post('signatures/updatelogo','SignatureManagementController@updatelogo')->name('signatures.updatelogo');
+
+
+//TEST MAILS
+
+Route::get('mails/test','MailsManagementController@test')->name('mails.test');
+
+
+
+

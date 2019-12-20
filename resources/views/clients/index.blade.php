@@ -16,20 +16,40 @@
 <?php
 $clients=count(DB::table('clients')->get());
 ?>
+
+<style>
+   
+    
+    table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #1d96b2;
+     
+}
+   }
+
+</style>
 <section class="content">
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">{{$clients}} 
-              &nbsp;Clients /Members  &nbsp; &nbsp;
-             
-              <a href="{{action('ExportManagementController@clientcsv')}}"><i class="fa fa-download">Export Csv</i></a>|
-              <a href="{{action('ExportManagementController@clientexcel')}}"><i class="fa fa-download">Export Excel</i></a>|
-              
+                  &nbsp;Clients /Members  &nbsp; &nbsp;
               </h3>
+             
+               <div class="btn-group" role="group" aria-label="..." style="float:right;">
+                  
+                  <a href="{{action('ExportManagementController@clientcsv')}}" class="btn btn-warning" ><i class="fa fa-download">Export Csv</i></a>
+                  <a href="{{action('ExportManagementController@clientexcel')}}" class="btn btn-info"><i class="fa fa-download">Export Excel</i></a>
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default" style=""><i class="fa fa-user-plus"> Add New Client </i></button>
+                
+                </div>
+             
                
-                 <form style="float:right;" method="POST" action="{{route('clients.searchclient')}}">
+                 <form style="float:right;" method="POST" action="{{route('clients.searchclient')}}" >
                      @csrf
                      <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
                       <input type="text" name="search" class="form-control pull-right" placeholder="Search">
@@ -39,15 +59,13 @@ $clients=count(DB::table('clients')->get());
                       </div>
                     </div>
                 </form>
-                &nbsp; &nbsp;
-                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default" style="float:center;"><i class="fa fa-user-plus"> Add New Client </i></button>
                 
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table  class="table table-bordered table-striped">
+              <table  class="table" style="border: 1px solid #1d96b2;" id="example2">
                 <thead>
-                    <tr>
+                    <tr style="background-color:rgb(29, 150, 178);color:white;border: 1px solid #1d96b2;">
                         <th>#</th>
                         <th>Member No</th>
                         <th>Name</th>
@@ -65,7 +83,7 @@ $clients=count(DB::table('clients')->get());
                 <tbody>
                     @if(!empty($data))
                         @foreach($data as $key=>$record)
-                        <tr>
+                        <tr style="border: 1px solid #1d96b2;">
                             <td>{{++$key}}</td>
                             <td>{{$record->member_id}}</td>
                             <td>{{$record->firstname}} {{$record->lastname}}</td>
@@ -78,7 +96,7 @@ $clients=count(DB::table('clients')->get());
                           
                             
                             <td>
-                                 <a href="#" data-toggle="modal" data-target="#action{{$record->id}}"><i class="fa fa-edit">Action</i></a>
+                                 <a href="#" data-toggle="modal" data-target="#action{{$record->id}}" class="btn btn-success btn-xs"><i class="fa fa-edit">Action</i></a>
                             </td>
                             
                         </tr>
@@ -86,27 +104,33 @@ $clients=count(DB::table('clients')->get());
                          <div class="modal fade" id="action{{$record->id}}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Which action do you want to perform on this client ?</h4>
+                                    <div class="modal-header" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
+                                        
+                                        <h4 class="modal-title"><center>Which action do you want to perform on this client ?</center></h4>
                                         
                                     </div>
                                
                                     <div class="modal-body">
-                                        <ul>
-                                            <li><a href="#" data-toggle="modal" data-target="#update{{$record->id}}"><i class="fa fa-edit">Update</i></a></li>
-                                           
-                                            <li><a href="{{url('/messages/send/'.$record->client_no)}}" ><i class="fa fa-envelope">Send Message</i></a></li>
-                                            <li><a href="{{url('/mails/send/'.$record->client_no)}}" ><i class="fa fa-envelope">Send Mail</i></a></li>
-                                            <li><a href="{{url('/invoices/InvoiceManagement/'.$record->client_no)}}" ><i class="fa fa-book">Invoice Management</i></a></li>
-                                           
-                                            <li><a href="#" data-toggle="modal" data-target="#delete{{$record->id}}"><i class="fa fa-trash">Delete</i></a></li>
-                                        </ul>
+                                        
+                                            <ul>
+                                                
+                                                    <li><a href="#" data-toggle="modal" data-target="#update{{$record->id}}" style="color:#9e9e9e !important;"><i class="fa fa-edit" style="font-size:2rem;">Update</i></a></li><br>
+                                                   
+                                                    <li><a href="{{url('/messages/send/'.$record->client_no)}}" style="color:#9e9e9e !important;" ><i class="fa fa-envelope" style="font-size:2rem;">Send Message</i></a></li><br>
+                                                    <li><a href="{{url('/mails/send/'.$record->client_no)}}" style="color:#9e9e9e !important;"><i class="fa fa-envelope" style="font-size:2rem;">Send Mail</i></a></li><br>
+                                                    <li><a href="{{url('/invoices/InvoiceManagement/'.$record->client_no)}}" style="color:#9e9e9e !important;" style="font-size:2rem;"><i class="fa fa-book" style="font-size:2rem;">Invoice Management</i></a></li><br>
+                                                   
+                                                    <li><a href="#" data-toggle="modal" data-target="#delete{{$record->id}}" style="color:#9e9e9e !important;"><i class="fa fa-trash" style="font-size:2rem;">Archive</i></a></li>
+                                            
+                                            </ul>
+                                       
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+padding: .84rem 2.14rem;
+font-size: 18px;color: #fff;">Close</button>
                                        
                                     </div>
                               
@@ -121,10 +145,9 @@ $clients=count(DB::table('clients')->get());
                         <div class="modal fade" id="delete{{$record->id}}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Are You sure you want to delete this record ?</h4>
+                                    <div class="modal-header" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
+                                        
+                                        <h4 class="modal-title"><center>Are you sure you want to archive this record</center></h4>
                                         
                                     </div>
                                 <form class="form-horizontal" method="POST" action="{{route('clients.delete')}}">
@@ -140,8 +163,17 @@ $clients=count(DB::table('clients')->get());
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        
+                                        
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Close</button>
+                                                                    <button type="submit" class="btn btn-primary" style="background-color: #4285f4 !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Archive</button>
+
                                     </div>
                                 </form>
                                 </div>
@@ -300,15 +332,14 @@ $clients=count(DB::table('clients')->get());
                         <div class="modal fade" id="update{{$record->id}}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Update Member/Client</h4>
+                                    <div class="modal-header" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
+                                        
+                                        <h4 class="modal-title"><center>Update Member/Client</center></h4>
                                         
                                     </div>
                                 <form class="form-horizontal" method="POST" action="{{route('clients.update')}}">
                                     @csrf
-                                    <div class="modal-body">
+                                   <div class="modal-body" style="color:#9e9e9e !important;">
 
                                         <div class="form-group" style="display:none;">
                                             <label class="col-sm-4 control-label">ID</label>
@@ -403,9 +434,20 @@ $clients=count(DB::table('clients')->get());
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Update</button>
+                                        
+                                        
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Close</button>
+                                                                    <button type="submit" class="btn btn-primary" style="background-color: #4285f4 !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Update</button>
+
                                     </div>
+                                    
+                                    
                                 </form>
                                 </div>
                                 <!-- /.modal-content -->
@@ -422,7 +464,7 @@ $clients=count(DB::table('clients')->get());
                     @endif
                 </tbody>
                 <tfoot>
-                     <tr>
+                     <tr style="background-color:rgb(29, 150, 178);color:white;">
                         <th>#</th>
                         <th>Member No</th>
                         <th>Name</th>
@@ -441,10 +483,9 @@ $clients=count(DB::table('clients')->get());
               <div class="modal fade" id="modal-default">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Add New Member/Client</h4>
+                        <div class="modal-header" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
+                            
+                            <h4 class="modal-title"><center>MEMBER REGISTRATION FORM</center></h4>
 
                             @if ($errors->any())
                                 <div class="alert alert-danger">
@@ -460,7 +501,7 @@ $clients=count(DB::table('clients')->get());
                         </div>
                     <form class="form-horizontal" method="POST" action="{{route('clients.add')}}">
                         @csrf
-                        <div class="modal-body">
+                        <div class="modal-body" style="color:#9e9e9e !important;">
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Member No</label>
@@ -543,8 +584,16 @@ $clients=count(DB::table('clients')->get());
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+padding: .84rem 2.14rem;
+font-size: 18px;color: #fff;">Close</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: #4285f4 !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+padding: .84rem 2.14rem;
+font-size: 18px;color: #fff;">Save</button>
+                            
                         </div>
                      </form>
                     </div>

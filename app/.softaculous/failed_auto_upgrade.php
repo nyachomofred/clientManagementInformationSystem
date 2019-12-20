@@ -1,0 +1,2 @@
+a:1:{s:8:"26_78970";a:5:{s:5:"insid";s:8:"26_78970";s:8:"from_ver";s:5:"5.2.4";s:6:"to_ver";s:3:"5.3";s:10:"error_code";i:1;s:5:"error";s:189:"This installation does not meet the Auto Upgrade requirements. Hence it cannot be auto upgraded. Following are the details :
+It is not possible to upgrade WordPress Multisite installations.";}}

@@ -15,24 +15,45 @@
 <?php
 $users=count(DB::table('users')->get());
 ?>
-<section class="content">
+
+<style>
+   
+    
+    table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #1d96b2;
+     
+}
+   }
+
+</style>
+
+<section class="content" style="background-color:white;">
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">{{$users}} &nbsp;Users</h3>
 
-              <a href="{{action('ExportManagementController@userpdf')}}"><i class="fa fa-download"></i>Export Pdf</a>|
-              <a href="{{action('ExportManagementController@usercsv')}}"><i class="fa fa-download">Export Csv</i></a>|
-              <a href="{{action('ExportManagementController@userexcel')}}"><i class="fa fa-download">Export Excel</i></a>|
               
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default" style="float:right;"><i class="fa fa-user-plus"> Add New User </i></button>
+               <div class="btn-group" role="group" aria-label="..." style="float:right;">
+                   
+                   <a href="{{action('ExportManagementController@userpdf')}}" class="btn btn-warning" ><i class="fa fa-download"></i>Export Pdf</a>
+                  <a href="{{action('ExportManagementController@usercsv')}}" class="btn btn-info"><i class="fa fa-download">Export Csv</i></a>
+                  <a href="{{action('ExportManagementController@userexcel')}}" class="btn btn-primary"><i class="fa fa-download">Export Excel</i></a>
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default" style="float:right;"><i class="fa fa-user-plus"> Add New User </i></button>
+              
+                </div>
+             
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="example1" class="table" style="border: 1px solid #1d96b2;">
                 <thead>
-                    <tr>
+                   <tr style="background-color:rgb(29, 150, 178);color:white;border: 1px solid #1d96b2;">
                        
                         <th>#</th>
                         <th>Firstname</th>
@@ -67,22 +88,24 @@ $users=count(DB::table('users')->get());
                             <div class="modal fade" id="action{{$record->id}}">
                             <div class="modal-dialog">
                             <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">What action do you want to perform on this user ?</h4>
-                                    
+                               <div class="modal-header" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
+                                        
+                                        <h4 class="modal-title"><center>Which action do you want to perform on this user</center></h4>
+                                        
                                 </div>
                            
                                 <div class="modal-body">
                                        <ul>
-                                            <li><a href="#" data-toggle="modal" data-target="#update{{$record->id}}"><i class="fa fa-eye">Update</i></a></li>
-                                            <li><a href="#" data-toggle="modal" data-target="#delete{{$record->id}}"><i class="fa fa-eye">Delete</i></a></li>
+                                            <li><a href="#" data-toggle="modal" data-target="#update{{$record->id}}" style="color:#9e9e9e !important;"><i class="fa fa-eye" style="font-size:2rem;">Update</i></a></li><br>
+                                            <li><a href="#" data-toggle="modal" data-target="#delete{{$record->id}}" style="color:#9e9e9e !important;"><i class="fa fa-eye" style="font-size:2rem;">Archive</i></a></li><br>
                                         </ul>
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Close</button>
                                 </div>
                             
                             </div>
@@ -129,15 +152,14 @@ $users=count(DB::table('users')->get());
                         <div class="modal fade" id="update{{$record->id}}">
                             <div class="modal-dialog">
                             <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">Update User</h4>
+                                <div class="modal-header" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
+                                   
+                                   <h4 class="modal-title"><center>Update user</center></h4>
                                     
                                 </div>
                             <form class="form-horizontal" method="POST" action="{{route('users.updateuser')}}">
                                 @csrf
-                                <div class="modal-body">
+                                 <div class="modal-body" style="color:#9e9e9e !important;">
 
                                     <div class="form-group" style="display:none">
                                         <label class="col-sm-4 control-label">Id</label>
@@ -201,8 +223,14 @@ $users=count(DB::table('users')->get());
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Close</button>
+                                    <button type="submit" class="btn btn-primary" style="background-color: #4285f4 !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Update</button>
                                 </div>
                             </form>
                             </div>
@@ -218,27 +246,17 @@ $users=count(DB::table('users')->get());
                         @endforeach
                     @endif
                 </tbody>
-                <tfoot>
-                     <tr>
-                        <th>#</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email Address</th>
-                        <th>Role</th>
-                        <th>Password</th>
-                        <th>Action</th>
-                     </tr>
-                </tfoot>
+               
               </table>
 
               <div class="modal fade" id="modal-default">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Add New User</h4>
-
+                        <div class="modal-header" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
+                                   
+                                   <h4 class="modal-title"><center>Add new user</center></h4>
+                                    
+                        </div>
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
@@ -249,10 +267,11 @@ $users=count(DB::table('users')->get());
                                 </div>
                             @endif
                             
-                        </div>
+                        
                     <form class="form-horizontal" method="POST" action="{{route('users.adduser')}}">
                         @csrf
-                        <div class="modal-body">
+                       <div class="modal-body" style="color:#9e9e9e !important;">
+
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Firstname</label>
@@ -308,8 +327,14 @@ $users=count(DB::table('users')->get());
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Close</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: #4285f4 !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;" >Save</button>
                         </div>
                      </form>
                     </div>

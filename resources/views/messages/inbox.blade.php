@@ -1,7 +1,22 @@
 @extends('layouts.master')
 @section('content')
 <!-- Main content -->
-<section class="content">
+
+
+<style>
+
+    table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #1d96b2;
+     
+}
+   }
+
+</style>
+<section class="content" style="background-color:white;">
       <div class="row">
         
         <div class="col-md-12">
@@ -10,9 +25,14 @@
               <h3 class="box-title">Sent Messages</h3>
 
 
-              <a href="{{action('ExportManagementController@messagepdf')}}"><i class="fa fa-download"></i>Export Pdf</a>|
-              <a href="{{action('ExportManagementController@messagecsv')}}"><i class="fa fa-download">Export Csv</i></a>|
-              <a href="{{action('ExportManagementController@messageexcel')}}"><i class="fa fa-download">Export Excel</i></a>|
+              
+              
+              <div class="btn-group" role="group" aria-label="..." style="float:right;">
+                   <a href="{{action('ExportManagementController@messagepdf')}}" class="btn btn-info"><i class="fa fa-download">Export Pdf</i></a>
+                  <a href="{{action('ExportManagementController@messagecsv')}}" class="btn btn-warning" ><i class="fa fa-download">Export Csv</i></a>
+                  <a href="{{action('ExportManagementController@messageexcel')}}" class="btn btn-info"><i class="fa fa-download">Export Excel</i></a>
+                  
+                </div>
 
 
               <div class="box-tools pull-right">
@@ -28,10 +48,10 @@
                
               </div>
               <div class="table-responsive mailbox-messages">
-                <table class="table table-hover table-striped" id="example1">
+                 <table  class="table" style="border: 1px solid #1d96b2;" id="example1">
 
                 <thead>
-                    <tr>
+                    <tr style="background-color:rgb(29, 150, 178);color:white;border: 1px solid #1d96b2;">
                        
                         <th>#</th>
                         <th>Subject</th>

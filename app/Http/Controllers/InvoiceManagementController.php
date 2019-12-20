@@ -35,8 +35,8 @@ class InvoiceManagementController extends Controller
                        ->get();
     return view('invoices.displayClients')->with(['data'=>$data,'invoices'=>$invoices]);
 
-    }
-    public function insertInvoice(Request $request){
+    }//function that search client
+    public function insertInvoice(Request $request){//function that insert invoice into database
         $invoice_no=rand(100,10000);
         $timezone=date_default_timezone_set('Africa/Nairobi');
         $insertData=DB::table('invoices')->insert([
@@ -48,6 +48,7 @@ class InvoiceManagementController extends Controller
             'email'=>$request->email,
             'phonenumber'=>$request->phonenumber,
             'invoice_name'=>ucfirst($request->invoice_name),
+            'vat'=>$request->vat,
             'day'=>Date('d'),
             'month'=>Date('m'),
             'year'=>Date('Y'),
@@ -70,10 +71,18 @@ class InvoiceManagementController extends Controller
         $id=$request->id;
         $updateData=DB::table('invoices')->where(['id'=>$id])->update([
             'invoice_name'=>ucfirst($request->invoice_name),
-            
+            'vat'=>$request->vat,
             'dueData'=>$request->dueData,
 
         ]);
+        
+        $invoiceVat=DB::table('invoices')->where(['id'=>$id])->first();
+        $invoiceNo=$invoiceVat->invoice_no;
+        $vat=$invoiceVat->vat;
+        $sumItemNoVat=DB::table('invoiceitems')->where(['invoice_no'=>$invoiceNo])->sum('amount');
+        $vatToBeAded=$sumItemNoVat*$vat;
+        $sumItems=$sumItemNoVat+$vatToBeAded;
+        $updateInvoicetotal=DB::table('invoicetotals')->where(['invoice_no'=>$invoiceNo])->update(['total'=>$sumItems]);
         Alert::success('Success','Data has been updated successfully');
         return redirect()->back();
 
@@ -91,7 +100,14 @@ class InvoiceManagementController extends Controller
         $data=DB::table('invoices')->where(['invoice_no'=>$invoice_no])->first();
         $invoiceitems=DB::table('invoiceitems')->where(['invoice_no'=>$invoice_no])->get();
         $totalitems=count(DB::table('invoiceitems')->where(['invoice_no'=>$invoice_no])->get());
-        return view('invoices.additeminvoicepage')->with(['data'=>$data,'invoiceitems'=>$invoiceitems,'totalitems'=>$totalitems]);
+        
+         $items=DB::table('invoices')->where(['invoice_no'=>$invoice_no])->first();
+         $invoiceItems=DB::table('invoiceitems')->where(['invoice_no'=>$invoice_no])->get();
+         $itemcount=count(DB::table('invoiceitems')->where(['invoice_no'=>$invoice_no])->get());
+         $total=DB::table('invoicetotals')->where(['invoice_no'=>$invoice_no])->first();
+         $sum=DB::table('invoiceitems')->where(['invoice_no'=>$invoice_no])->sum('amount');
+         
+        return view('invoices.additeminvoicepage')->with(['data'=>$data,'invoiceitems'=>$invoiceitems,'totalitems'=>$totalitems,'items'=>$items,'invoiceItems'=>$invoiceItems,'total'=>$total,'sum'=>$sum]);
     }
     public function insertInvoiceItem(Request $request){
         $validateData=$request->validate([
@@ -100,6 +116,8 @@ class InvoiceManagementController extends Controller
             'unitPrice'=>'required|numeric|min:1|max:1000000',
             'description'=>'required|string',
         ]);
+        $invoiceVat=DB::table('invoices')->where(['invoice_no'=>$request->invoice_no])->first();
+        $vat=$invoiceVat->vat;
         $amount=$request->qty*$request->unitPrice;
          $insertData=DB::table('invoiceitems')->insert([
              'invoice_no'=>$request->invoice_no,
@@ -109,7 +127,9 @@ class InvoiceManagementController extends Controller
              'description'=>ucwords($request->description),
              'amount'=>$amount,
          ]);
-         $sumItems=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+         $sumItemNoVat=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+         $vatToBeRemoved=$sumItemNoVat*$vat;
+         $sumItems=$sumItemNoVat+$vatToBeRemoved;
          $updateInvoicetotal=DB::table('invoicetotals')->where(['invoice_no'=>$request->invoice_no])->update(['total'=>$sumItems]);
          Alert::success('Success','Data inserted successfully');
         return redirect()->back();
@@ -117,24 +137,35 @@ class InvoiceManagementController extends Controller
 
     public function updateInvoiceItem(Request $request){
         $id=$request->id;
+        $invoiceVat=DB::table('invoices')->where(['invoice_no'=>$request->invoice_no])->first();
+        $vat=$invoiceVat->vat;
         $amount=$request->qty*$request->unitPrice;
-         $insertData=DB::table('invoiceitems')->where(['id'=>$id])->update([
+        $insertData=DB::table('invoiceitems')->where(['id'=>$id])->update([
              'itemType'=>ucwords($request->itemType),
              'qty'=>$request->qty,
              'unitPrice'=>$request->unitPrice,
              'description'=>ucwords($request->description),
              'amount'=>$amount,
          ]);
-         $sumItems=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+         
+         $sumItemNoVat=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+         $vatToBeRemoved=$sumItemNoVat*$vat;
+         $sumItems=$sumItemNoVat+$vatToBeRemoved;
          $updateInvoicetotal=DB::table('invoicetotals')->where(['invoice_no'=>$request->invoice_no])->update(['total'=>$sumItems]);
          Alert::success('Success','Record updated  successfully');
         return redirect()->back();
     }
 
     public function deleteInvoiceItem(Request $request){
-         $id=$request->id;
-         $insertData=DB::table('invoiceitems')->where(['id'=>$id])->delete();
-         $sumItems=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+          $id=$request->id;
+          $insertData=DB::table('invoiceitems')->where(['id'=>$id])->delete();
+          $invoiceVat=DB::table('invoices')->where(['invoice_no'=>$request->invoice_no])->first();
+          $vat=$invoiceVat->vat;
+          $sumItemNoVat=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+          $vatToBeRemoved=$sumItemNoVat*$vat;
+          $sumItems=$sumItemNoVat+$vatToBeRemoved;
+        
+        // $sumItems=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
          $updateInvoicetotal=DB::table('invoicetotals')->where(['invoice_no'=>$request->invoice_no])->update(['total'=>$sumItems]);
          Alert::success('Success','One record has been delete successfully');
         return redirect()->back();
@@ -142,13 +173,15 @@ class InvoiceManagementController extends Controller
 
     public function invoiceview(Request $request)
     {
-        $invoiceNo=$request->invoice_no;
+         $invoiceNo=$request->invoice_no;
          $items=DB::table('invoices')->where(['invoice_no'=>$invoiceNo])->first();
          $invoiceItems=DB::table('invoiceitems')->where(['invoice_no'=>$invoiceNo])->get();
          $itemcount=count(DB::table('invoiceitems')->where(['invoice_no'=>$invoiceNo])->get());
          $total=DB::table('invoicetotals')->where(['invoice_no'=>$invoiceNo])->first();
+         $sum=DB::table('invoiceitems')->where(['invoice_no'=>$request->invoice_no])->sum('amount');
+        
          if($itemcount > 0){
-             view()->share(['items'=>$items,'invoiceItems'=>$invoiceItems,'total'=>$total]);
+             view()->share(['items'=>$items,'invoiceItems'=>$invoiceItems,'total'=>$total,'sum'=>$sum]);
              $pdf = PDF::loadView('invoices.invoiceview');
              return $pdf->download('invoice.pdf');
              

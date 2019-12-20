@@ -2,8 +2,23 @@
 @section('content')
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<style>
+   
+    
+    table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #1d96b2;
+     
+}
+   }
+
+</style>
 <!-- Main content -->
-<section class="content">
+<section class="content" style="background-color:white;">
      
       <div class="row">
         <div class="col-xs-12">
@@ -20,10 +35,11 @@
             <div class="box-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
-                    <tr>
+                    <tr style="background-color:rgb(29, 150, 178);color:white;border: 1px solid #1d96b2;">
                         <th>#</th>
                         <th>Invoice No</th>
                         <th>Name</th>
+                        <th>V.A.T</th>
                         <th>Date Created</th>
                         <th>Due Date</th>
                         <th>Action</th>
@@ -32,10 +48,11 @@
                 <tbody>
                     @if(!empty($invoices))
                         @foreach($invoices as $key=>$invoice)
-                        <tr>
+                        <tr style="border: 1px solid #1d96b2;">
                             <td>{{++$key}}</td>
                             <td>{{$invoice->invoice_no}}</td>
                             <td>{{$invoice->invoice_name}}</td>
+                             <td>{{$invoice->vat}}</td>
                             <td>{{$invoice->day}} /{{$invoice->month}} /{{$invoice->year}}  {{$invoice->dayTime}}</td>
                             <td>{{$invoice->dueData}}</td>
                           
@@ -48,10 +65,11 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#" data-toggle="modal" data-target="#additem{{$invoice->id}}"><i class="fa fa-eye">Add Item To Invoice</i></a></li>
+                                           
                                             <li><a href="#" data-toggle="modal" data-target="#update{{$invoice->id}}"><i class="fa fa-eye">Update Invoice</i></a></li>
-                                            <li><a href="{{url('/invoices/addItemInvoicePage/'.$invoice->invoice_no)}}" ><i class="fa fa-eye">View Item In Invoice/Download Invoice</i></a></li>
-                                            
+                                            <li><a href="{{url('/invoices/addItemInvoicePage/'.$invoice->invoice_no)}}" ><i class="fa fa-eye">Add item to invoice</i></a></li>
+                                            <li><a href="{{url('/invoices/addItemInvoicePage/'.$invoice->invoice_no)}}" ><i class="fa fa-eye">View item in invoice</i></a></li>
+                                            <li><a href="{{url('/invoices/addItemInvoicePage/'.$invoice->invoice_no)}}" ><i class="fa fa-eye">Download Invoice</i></a></li>
                                             <li><a href="#" data-toggle="modal" data-target="#delete{{$invoice->id}}"><i class="fa fa-trash">Delete Invoice</i></a></li>
                                         </ul>
                                     </div>
@@ -97,15 +115,14 @@
                         <div class="modal fade" id="update{{$invoice->id}}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Update Invoice</h4>
+                                    <div class="modal-header" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
                                         
+                                        <center><h4 class="modal-title">Update Invoice</h4></center>
+                
                                     </div>
                                 <form class="form-horizontal" method="POST" action="{{route('invoices.updateInvoice')}}">
                                     @csrf
-                                    <div class="modal-body">
+                                    <div class="modal-body" style="color:#9e9e9e !important;">
 
 
                                         <div class="form-group" style="display:none;">
@@ -126,6 +143,17 @@
                                         </div>
 
                                         <br> <br>
+                                        
+                                         <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-2 control-label">Invoice V.A.T</label>
+                                            <div class="col-sm-10"> 
+                                              <input type="number"  step="0.01" min="0" max="1"  name="vat" class="form-control" required value="{{$invoice->vat}}">
+                                            </div>
+                                            
+                                        </div>
+
+                                        <br> <br>
+                                        
                                
 
                                         <div class="form-group">
@@ -142,8 +170,14 @@
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Update</button>
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Close</button>
+                                        <button type="submit" class="btn btn-primary" style="background-color: #4285f4 !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Update</button>
                                     </div>
                                 </form>
                                 </div>
@@ -242,16 +276,14 @@
                 @if(!empty($client))
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Create New  Invoice</h4>
+                           <div class="modal-header" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
+                                
+                                <center><h4 class="modal-title">Create New  Invoice</h4></center>
                                 
                             </div>
                             <form class="form-horizontal" method="POST" action="{{route('invoices.insertInvoice')}}">
                             @csrf
-                            <div class="modal-body">
-
+                             <div class="modal-body" style="color:#9e9e9e !important;">
                             
                             <div class="form-group" style="display:none">
                                 <label for="inputEmail3" class="col-sm-2 control-label">Client no</label>
@@ -313,6 +345,16 @@
                                 </div>
                                 
                         </div>
+                        <br>
+                        
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Invoice V.A.T</label>
+                            <div class="col-sm-10"> 
+                               
+                                <input type="number" name="vat" class="form-control" min='0' max="1"  step="0.01" required>
+                                </div>
+                                
+                        </div>
 
                         
                         <br>
@@ -332,8 +374,14 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Create Invoice</button>
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Close</button>
+                                <button type="submit" class="btn btn-primary" style="background-color: #4285f4 !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;">Create Invoice</button>
                             </div>
                         </form>
                         </div>

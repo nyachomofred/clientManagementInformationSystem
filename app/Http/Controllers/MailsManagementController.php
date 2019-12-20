@@ -755,4 +755,9 @@ class MailsManagementController extends Controller
             }   
     }
 
+
+    public function test(){
+        return view('mails.test');
+    }
+
 }

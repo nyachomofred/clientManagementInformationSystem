@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Pnlinh\InfobipSms\Facades\InfobipSms;
@@ -48,7 +47,7 @@ class MessageManagementController extends Controller
             $phonenumber=$request->phonenumber;
             $message=$request->message;
             $result = InfobipSms::send($phonenumber, $message);
-            if( $result==TRUE){
+            if($result==TRUE){
                 $saveData=DB::table('singlemessages')->insert([
                     'member_id'=>ucwords($request->member_id),
                     'client_no'=>$request->client_no,

@@ -17,7 +17,7 @@ class ClientManagementController extends Controller
     }
     
     public function index(){
-        $data=DB::table('clients')->paginate(13);
+        $data=DB::table('clients')->paginate(10);
         return view('clients.index')->with(['data'=>$data]);
     }
     

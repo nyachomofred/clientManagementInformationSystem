@@ -72,7 +72,7 @@ th {
                  12/12/2009
               </td>
               <td  style="border:0px solid black;width:100%;" align="right;">
-                <b style="color:red;font-size:35px;"> Ksh {{$total->total}}.00</b><br>
+                <b style="color:red;font-size:35px;"> Ksh {{$total->total}}</b><br>
               </td>
            </tr>
       <tbody>
@@ -98,8 +98,8 @@ th {
                   <td>{{$invoiceItem->itemType}}</td>
                   <td>{{$invoiceItem->description}}</td>
                   <td>{{$invoiceItem->qty}}</td>
-                  <td>{{$invoiceItem->unitPrice}}.00</td>
-                  <td>{{$invoiceItem->amount}}.00</td>
+                  <td>{{$invoiceItem->unitPrice}}</td>
+                  <td>{{$invoiceItem->amount}}</td>
                </tr>
             @endforeach
 
@@ -110,16 +110,19 @@ th {
                         <tbody>
                            <tr style="border:0px solid black">
                               <td style="border:0px solid black">Sub Total (Ksh)</td>
-                              <td style="border:0px solid black">{{$total->total}}.00</td>
+                              @if(!empty($sum))
+                              <td style="border:0px solid black">{{$sum}}</td>
+                              @endif
                            </tr>
                            <tr style="border:0px solid black">
                               <td style="border:0px solid black">VAT</td>
-                              <td style="border:0px solid black">0.00</td>
+                              
+                              <td style="border:0px solid black">{{$items->vat}}</td>
                            </tr>
 
                            <tr style="border:0px solid black">
                               <td style="border:0px solid black"><b>TOTAL</b></td>
-                              <td style="border:0px solid black">{{$total->total}}.00</td>
+                              <td style="border:0px solid black">{{$total->total}}</td>
                            </tr>
 
                         </tbody>

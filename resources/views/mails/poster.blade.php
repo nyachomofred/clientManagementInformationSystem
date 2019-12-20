@@ -22,13 +22,13 @@ $clients=DB::table('clients')->get();
       @endif
 
           <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Compose Mail . This message will be received by only selected people</h3>
+            <div class="box-header with-border" style="background-color: #2bbbad !important;color:white;text-transform:uppercase;">
+             <center> <h3 class="box-title">Compose Mail . This message will be received by only selected people</h3></center>
             </div>
                 <form method="POST" action="{{route('mails.createposter')}}" enctype="multipart/form-data" class="form-horizontal">
                 @csrf
                     <!-- /.box-header -->
-                    <div class="box-body">
+                <div class="modal-body" style="color:#9e9e9e !important;">
 
                     <div class="form-group">
                        <label class="col-sm-2 control-label">Select Recipient</label>
@@ -83,9 +83,15 @@ $clients=DB::table('clients')->get();
                     <!-- /.box-body -->
                     <div class="box-footer">
                       <div class="pull-right">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
+                        <button type="submit" class="btn btn-primary" style="background-color: #4285f4 !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;"><i class="fa fa-envelope-o"></i> Send</button>
                       </div>
-                      <a href="{{route('mails.index')}}" class="btn btn-default"><i class="fa fa-times"></i> Discard</a>
+                      <a href="{{route('mails.index')}}" class="btn btn-default" style="background-color: #a6c !important;border-radius: .125rem;text-transform: uppercase;word-wrap: break-word;
+                                        white-space: normal;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+                                        padding: .84rem 2.14rem;
+                                        font-size: 18px;color: #fff;"><i class="fa fa-times"></i> Discard</a>
                     </div>
                 </form>
             <!-- /.box-footer -->

@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Http\Controllers;
-use AfricasTalking\SDK\AfricasTalking;
 use Illuminate\Http\Request;
+use Pnlinh\InfobipSms\Facades\InfobipSms;
+use AfricasTalking\SDK\AfricasTalking;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Input;
 use DB;
 use dateTime;
-
 
 class MessageManagementController extends Controller
 {
@@ -45,14 +44,10 @@ class MessageManagementController extends Controller
     //public function se
     public function sendToOnePerson(Request $request){
 
-            $username = 'clientapp'; // use 'sandbox' for development in the test environment
-            $apiKey   = '9e27d9238fc430780f66d0e852f9bed4c2f3a6ecb4b2552c95651c8e31b88e32'; // use your sandbox app API key for development in the test environment
-            $AT       = new AfricasTalking($username, $apiKey); 
-            $sms      = $AT->sms(); //initiate sms
             $phonenumber=$request->phonenumber;
             $message=$request->message;
-            $result   = $sms->send([ 'to' =>$phonenumber,'message' =>$message]);
-            if( $result==TRUE){
+            $result = InfobipSms::send($phonenumber, $message);
+            if($result==TRUE){
                 $saveData=DB::table('singlemessages')->insert([
                     'member_id'=>ucwords($request->member_id),
                     'client_no'=>$request->client_no,
@@ -100,11 +95,7 @@ class MessageManagementController extends Controller
         $message_id=rand();
         $validateData=$request->validate(['subject'=>'required|string|max:200','message'=>'required|string','phonenumbers'=>'required']);
           foreach($phonenumbers as $phonenumber){
-            $username = 'clientapp'; // use 'sandbox' for development in the test environment
-            $apiKey   = '9e27d9238fc430780f66d0e852f9bed4c2f3a6ecb4b2552c95651c8e31b88e32'; // use your sandbox app API key for development in the test environment
-            $AT       = new AfricasTalking($username, $apiKey); 
-            $sms      = $AT->sms(); //initiate sms
-            $result   = $sms->send([ 'to' =>$phonenumber,'message' =>$message]); //send sms
+            $result = InfobipSms::send($phonenumber, $message);//send message
             $data=DB::table('clients')->where(['phonenumber'=>$phonenumber])->get();
             foreach($data as $client){
                 $firstname=$client->firstname;
@@ -151,11 +142,7 @@ class MessageManagementController extends Controller
         if($totalmembers >0){
             foreach($fullmembers as $fullmember){
                 $phonenumber=$fullmember->phonenumber;
-                $username = 'clientapp'; // use 'sandbox' for development in the test environment
-                $apiKey   = '9e27d9238fc430780f66d0e852f9bed4c2f3a6ecb4b2552c95651c8e31b88e32'; // use your sandbox app API key for development in the test environment
-                $AT       = new AfricasTalking($username, $apiKey);
-                $sms      = $AT->sms();
-                $result   = $sms->send([ 'to' =>$phonenumber,'message' =>$message]);
+                $result = InfobipSms::send($phonenumber, $message);//send message
                 $data=DB::table('clients')->where(['phonenumber'=>$phonenumber])->get();
                 foreach($data as $client){
                     $firstname=$client->firstname;
@@ -205,11 +192,7 @@ class MessageManagementController extends Controller
         if($totalmember>0){
             foreach($fullmembers as $fullmember){
                 $phonenumber=$fullmember->phonenumber;
-                $username = 'clientapp'; // use 'sandbox' for development in the test environment
-                $apiKey   = '9e27d9238fc430780f66d0e852f9bed4c2f3a6ecb4b2552c95651c8e31b88e32'; // use your sandbox app API key for development in the test environment
-                $AT       = new AfricasTalking($username, $apiKey);
-                $sms      = $AT->sms();
-                $result   = $sms->send([ 'to' =>$phonenumber,'message' =>$message]);
+                $result = InfobipSms::send($phonenumber, $message);//send message
                 $data=DB::table('clients')->where(['phonenumber'=>$phonenumber])->get();
                 foreach($data as $client){
                     $firstname=$client->firstname;
@@ -261,11 +244,7 @@ class MessageManagementController extends Controller
         if($totalmember >0){
             foreach($fullmembers as $fullmember){
                 $phonenumber=$fullmember->phonenumber;
-                $username = 'clientapp'; // use 'sandbox' for development in the test environment
-                $apiKey   = '9e27d9238fc430780f66d0e852f9bed4c2f3a6ecb4b2552c95651c8e31b88e32'; // use your sandbox app API key for development in the test environment
-                $AT       = new AfricasTalking($username, $apiKey);
-                $sms      = $AT->sms();
-                $result   = $sms->send([ 'to' =>$phonenumber,'message' =>$message]);
+                $result = InfobipSms::send($phonenumber, $message);//send message
                 $data=DB::table('clients')->where(['phonenumber'=>$phonenumber])->get();
                 foreach($data as $client){
                     $firstname=$client->firstname;
@@ -315,11 +294,7 @@ class MessageManagementController extends Controller
         if($totalmembers >0){
             foreach($fullmembers as $fullmember){
                 $phonenumber=$fullmember->phonenumber;
-                $username = 'clientapp'; // use 'sandbox' for development in the test environment
-                $apiKey   = '9e27d9238fc430780f66d0e852f9bed4c2f3a6ecb4b2552c95651c8e31b88e32'; // use your sandbox app API key for development in the test environment
-                $AT       = new AfricasTalking($username, $apiKey);
-                $sms      = $AT->sms();
-                $result   = $sms->send([ 'to' =>$phonenumber,'message' =>$message]);
+                $result = InfobipSms::send($phonenumber, $message);//send message
                 $data=DB::table('clients')->where(['phonenumber'=>$phonenumber])->get();
                 foreach($data as $client){
                     $firstname=$client->firstname;

@@ -154,10 +154,20 @@ $registeredclients=count(DB::table('clients')->get());
             
           </a>
         </li>
+
+        
+
+
+        <li>
+          <a href="{{route('signatures.index')}}">
+            <i class="fa fa-home"></i> <span>Company Profile</span>
+            
+          </a>
+        </li>
        
         <li>
           <a href="{{route('profiles.index')}}">
-            <i class="fa fa-user"></i> <span>Profile</span>
+            <i class="fa fa-user"></i> <span>My Profile</span>
             
           </a>
         </li>
@@ -220,7 +230,7 @@ $registeredclients=count(DB::table('clients')->get());
           </a>
           <ul class="treeview-menu">
            
-            <li><a href="{{route('mails.barner')}}"><i class="fa fa-file-text-o"></i>Activation Mail</a></li>
+            <li><a href="{{route('mails.barner')}}"><i class="fa fa-file-text-o"></i>Banner</a></li>
             <li><a href="{{route('mails.poster')}}"><i class="fa fa-file-text-o"></i>Advertisement</a></li>
             
           </ul>
@@ -243,26 +253,17 @@ $registeredclients=count(DB::table('clients')->get());
             <li><a href="{{route('messages.composefullmember')}}"><i class="fa fa-file-text-o"></i>Message  Fullmembers</a></li>
             <li><a href="{{route('messages.composeassociatemember')}}"><i class="fa fa-file-text-o"></i>Message Associate Members</a></li>
             <li><a href="{{route('messages.composeToAll')}}"><i class="fa fa-file-text-o"></i> Message  all Members</a></li>
-            <li><a href="{{route('messages.draftmessage')}}"><i class="fa fa-file-text-o"></i>Draft Message</a></li>
+            
           </ul>
         </li>
 
 
 
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-envelope"></i>
-            <span>Reports</span>
-            <span class="pull-right-container">
-              <span class="label label-primary pull-right">5</span>
-            </span>
+        <li>
+          <a href="{{route('reports.index')}}">
+            <i class="fa fa-book"></i> <span>Reports</span>
+            
           </a>
-          <ul class="treeview-menu">
-            <li><a href="{{route('reports.client')}}"><i class="fa fa-file-text-o"></i> Members and their memberships</a></li>
-            <li><a href="#"><i class="fa fa-file-text-o"></i>Send and failed mails</a></li>
-            <li><a href="#"><i class="fa fa-file-text-o"></i> Send and Failed messages</a></li>
-            <li><a href="#"><i class="fa fa-file-text-o"></i>Send and processed invoices</a></li>
-          </ul>
         </li>
 
         <li>

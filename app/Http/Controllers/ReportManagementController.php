@@ -15,6 +15,10 @@ use Maatwebsite\Excel\Facades\Excel;
 class ReportManagementController extends Controller
 {
     //
+    public function index(){
+        return view('reports.index');
+    }
+    
     public function client(){
         $data=DB::table('clients')->get();
         return view('reports.client')->with(['data'=>$data]);
